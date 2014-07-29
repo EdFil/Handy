@@ -7,28 +7,52 @@ import java.util.ArrayList;
  */
 public class ObjectManager {
 
-    private ArrayList<Sprite> _objectList;
+    private ArrayList<GameObject> _objectList;
+    private ArrayList<GameObject> _objectsToAdd;
+    private boolean _isOnCycle;
 
     ObjectManager(){
-        _objectList = new ArrayList<Sprite>();
+        _isOnCycle = false;
+        _objectList = new ArrayList<GameObject>();
+        _objectsToAdd = new ArrayList<GameObject>();
     }
 
     public void addObject(Sprite sprite){
-        _objectList.add(sprite);
+       if(!_isOnCycle)
+           _objectList.add(sprite);
+       else
+           _objectsToAdd.add(sprite);
     }
 
-    public void update(){
-        for (Sprite sprite : _objectList) {
-            sprite.rotate(100.0f * Clock.getDelta());
-            //sprite.translate(1.0f * Clock.getDelta(), 0.0f);
-            sprite.update();
+    public void update(Camera camera){
+        if(_objectsToAdd.size() > 0) {
+            _objectList.addAll(_objectsToAdd);
+            _objectsToAdd.clear();
+        }
+        _isOnCycle = true;
+        for (GameObject gameObject : _objectList) {
+//            gameObject.rotate(100.0f * Clock.getDelta());
+//            sprite.translate(1.0f * Clock.getDelta(), 0.0f);
+            gameObject.collide(camera);
+            gameObject.update();
         }
     }
 
     public void draw(){
-        for (Sprite sprite : _objectList)
-            sprite.draw();
+        for (GameObject gameObject : _objectList)
+            gameObject.draw();
+        _isOnCycle = false;
     }
 
+    public void scaleAllObjects(float x) {
+        for (GameObject gameObject : _objectList)
+            gameObject.scale(x, x);
+        for (GameObject gameObject : _objectsToAdd)
+            gameObject.scale(x, x);
+    }
+
+    public int getNumObjects(){
+        return _objectList.size();
+    }
 
 }

@@ -6,6 +6,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
+import android.os.Debug;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
@@ -19,15 +20,15 @@ public class MyGLRenderer implements Renderer {
 
     // Misc
     Context mContext;
-    long mLastTime;
-    int i = 0;
+    long _currentTime = 0, _prevTime = 0;
+    long frameTime;
+    int frames = 0;
 
     public MyGLRenderer(Context c){
         mContext = c;
         DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
         _width = metrics.widthPixels;
         _height = metrics.heightPixels;
-        mLastTime = System.currentTimeMillis() + 100;
     }
 
     public void onPause()
@@ -38,27 +39,16 @@ public class MyGLRenderer implements Renderer {
     public void onResume()
     {
 		/* Do stuff to resume the renderer */
-        mLastTime = System.currentTimeMillis();
+        _currentTime = System.currentTimeMillis();
     }
 
     @Override
     public void onDrawFrame(GL10 unused) {
-        // Get the current time
-        long now = System.currentTimeMillis();
-
-        // We should make sure we are valid and sane
-        if (mLastTime > now) return;
-
-        
-
-        // Update our example
-
-        // Render our example
+        _prevTime = System.currentTimeMillis();
         Render();
-
-        // Save the current time to see how long it took :).
-        mLastTime = now;
-
+        _currentTime = System.currentTimeMillis();
+        frameTime = _currentTime - _prevTime;
+//        Log.d("", "Objects = " + _objectManager.getNumObjects() + " | time = " + frameTime);
     }
 
     private void Render() {
@@ -67,7 +57,7 @@ public class MyGLRenderer implements Renderer {
         // Bind ViewMatrix and ProjectionMatrix to the
         Clock.update();
         _camera.bindMatrices();
-        _objectManager.update();
+        _objectManager.update(_camera);
         _objectManager.draw();
 
     }
@@ -93,7 +83,15 @@ public class MyGLRenderer implements Renderer {
         ShaderProgramManager.init();
 
         _objectManager = new ObjectManager();
-        for (int i = 0; i < 50; i++)
+        for (int i = 0; i < 1; i++)
             _objectManager.addObject(new Sprite());
+    }
+
+    public void addObject(){
+        _objectManager.addObject(new Sprite());
+    }
+
+    public void scaleObjects(float x){
+        _objectManager.scaleAllObjects(x);
     }
 }

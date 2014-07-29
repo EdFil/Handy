@@ -2,6 +2,7 @@ package com.eddapps.handy;
 
 import android.opengl.GLES20;
 import android.opengl.Matrix;
+import android.util.Log;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -10,26 +11,13 @@ import java.nio.FloatBuffer;
 /**
  * Created by Edgar on 09/07/2014.
  */
-public class Sprite {
-    private static final float DEFAULT_SIZE_SPRITE = 0.1f;
-
-    private float _positionX, _positionY;
-    private float _scaleX, _scaleY;
-    private float _rotation;
-
-    private float[] _modelMatrix;
-    private float[] _color;
+public class Sprite extends GameObject {
+    public static final float DEFAULT_SIZE_SPRITE = 0.01f;
 
     private int[] _vertexBufferID;
 
     public Sprite(){
-//        _positionX = _positionY = 0.0f;
-        _positionX = (float) (Math.random() - 0.5f) * 3.0f;
-        _positionY = (float) (Math.random() - 0.5f) * 2.0f;
-        _color = new float[] {(float)Math.random(), (float)Math.random(), (float)Math.random(), 1.0f};
-        _scaleX = _scaleY = 1.0f;
-        _rotation = 0.0f;
-        _modelMatrix = new float[16];
+        super();
         createVertexBuffer();
     }
 
@@ -62,47 +50,22 @@ public class Sprite {
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
     }
 
+    @Override
     public void draw(){
         ShaderProgramManager.getDefaultShader().useProgram();
-        ShaderProgramManager.getDefaultShader().setModelMatrix(_modelMatrix);
-        ShaderProgramManager.getDefaultShader().setColor(_color);
+        ShaderProgramManager.getDefaultShader().setModelMatrix(getModelMatrix());
+        ShaderProgramManager.getDefaultShader().setColor(getColor());
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, _vertexBufferID[0]);
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 6);
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
     }
 
     public void update(){
-        Matrix.setIdentityM(_modelMatrix, 0);
-        Matrix.translateM(_modelMatrix, 0, _positionX, _positionY, 0.0f);
-        Matrix.rotateM(_modelMatrix, 0, _rotation, 0, 0, 1);
-        Matrix.scaleM(_modelMatrix, 0, _scaleX, _scaleY, 1.0f);
-    }
-
-    public void setPosition(float x, float y){
-        _positionX = x;
-        _positionY = y;
-    }
-
-    public void setRotation(float rotation){
-        _rotation = rotation;
-    }
-
-    public void setScale(float x, float y){
-        _scaleX = x;
-        _scaleY = y;
-    }
-
-    public void translate(float deltaX, float deltaY){
-        _positionX += deltaX;
-        _positionY += deltaY;
-    }
-
-    public void scale(float deltaX, float deltaY){
-        _scaleX += deltaX;
-        _scaleY += deltaY;
-    }
-
-    public void rotate(float deltaRotation){
-        _rotation += deltaRotation;
+        Log.d("", "Scale = " + getScaleX());
+        setPosition(getPositionX() + getDirectionX() * getVelocityX() * Clock.getDelta(), getPositionY() + getDirectionY() * getVelocityY() * Clock.getDelta());
+        Matrix.setIdentityM(getModelMatrix(), 0);
+        Matrix.translateM(getModelMatrix(), 0, getPositionX(), getPositionY(), 0.0f);
+        Matrix.rotateM(getModelMatrix(), 0, getRotation(), 0, 0, 1);
+        Matrix.scaleM(getModelMatrix(), 0, getScaleX(), getScaleY(), 1.0f);
     }
 }

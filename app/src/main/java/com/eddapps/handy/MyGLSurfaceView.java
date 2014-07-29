@@ -23,7 +23,6 @@ public class MyGLSurfaceView extends GLSurfaceView {
         mRenderer = new MyGLRenderer(context);
         setRenderer(mRenderer);
 
-        // Render the view only when there is a change in the drawing data
         setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
 
@@ -54,7 +53,16 @@ public class MyGLSurfaceView extends GLSurfaceView {
                 float dx = x - mPreviousX;
                 float dy = y - mPreviousY;
 
-                requestRender();
+                if(Math.abs(dx) > Math.abs(dy)) {
+                    if (dx > 0)
+                        mRenderer.addObject();
+                }
+                else{
+                   if (dy > 0)
+                        mRenderer.scaleObjects(-0.1f);
+                   else
+                        mRenderer.scaleObjects(0.1f);
+            }
         }
 
         mPreviousX = x;

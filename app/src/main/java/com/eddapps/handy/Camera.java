@@ -10,6 +10,7 @@ public class Camera {
 
     private float _positionX, _positionY;
     private float _rotation;
+    private float _ratio;
 
     private float[] _viewMatrix;
     private float[] _projectionMatrix;
@@ -58,8 +59,8 @@ public class Camera {
     }
 
     private void generateOrthographicProjection(int screenWidth, int screenHeight){
-        float ratio = (float) screenWidth / screenHeight;
-        Matrix.orthoM(_projectionMatrix, 0, -ratio, ratio, -1, 1, -10, 10);
+        _ratio = (float) screenWidth / screenHeight;
+        Matrix.orthoM(_projectionMatrix, 0, -_ratio, _ratio, -1, 1, -10, 10);
     }
 
     public void bindMatrices(){
@@ -75,4 +76,7 @@ public class Camera {
     //Getters
     public float[] getViewMatrixArray() { return _viewMatrix; }
     public float[] getProjectionMatrixArray() { return _projectionMatrix; }
+    public float getPositionX() { return _positionX; }
+    public float getPositionY() { return _positionY; }
+    public float getRatio() { return _ratio; }
 }
