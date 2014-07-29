@@ -1,7 +1,7 @@
 package com.eddapps.handy;
 
 import android.opengl.GLES20;
-import android.renderscript.Matrix4f;
+import android.opengl.Matrix;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -17,7 +17,7 @@ public class Sprite {
     private float _scaleX, _scaleY;
     private float _rotation;
 
-    private Matrix4f _modelMatrix;
+    private float[] _modelMatrix;
     private float[] _color;
 
     private int[] _vertexBufferID;
@@ -29,7 +29,7 @@ public class Sprite {
         _color = new float[] {(float)Math.random(), (float)Math.random(), (float)Math.random(), 1.0f};
         _scaleX = _scaleY = 1.0f;
         _rotation = 0.0f;
-        _modelMatrix = new Matrix4f();
+        _modelMatrix = new float[16];
         createVertexBuffer();
     }
 
@@ -64,7 +64,7 @@ public class Sprite {
 
     public void draw(){
         ShaderProgramManager.getDefaultShader().useProgram();
-        ShaderProgramManager.getDefaultShader().setModelMatrix(_modelMatrix.getArray());
+        ShaderProgramManager.getDefaultShader().setModelMatrix(_modelMatrix);
         ShaderProgramManager.getDefaultShader().setColor(_color);
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, _vertexBufferID[0]);
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 6);
@@ -72,10 +72,10 @@ public class Sprite {
     }
 
     public void update(){
-        _modelMatrix.loadIdentity();
-        _modelMatrix.translate(_positionX, _positionY, 0.0f);
-        _modelMatrix.scale(_scaleX, _scaleY, 1.0f);
-        _modelMatrix.rotate(_rotation, 0.0f, 0.0f, 1.0f);
+        Matrix.setIdentityM(_modelMatrix, 0);
+        Matrix.translateM(_modelMatrix, 0, _positionX, _positionY, 0.0f);
+        Matrix.rotateM(_modelMatrix, 0, _rotation, 0, 0, 1);
+        Matrix.scaleM(_modelMatrix, 0, _scaleX, _scaleY, 1.0f);
     }
 
     public void setPosition(float x, float y){

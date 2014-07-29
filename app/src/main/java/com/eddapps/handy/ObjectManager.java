@@ -8,30 +8,26 @@ import java.util.ArrayList;
 public class ObjectManager {
 
     private ArrayList<Sprite> _objectList;
-    private int _objectListSize;
 
     ObjectManager(){
         _objectList = new ArrayList<Sprite>();
-        _objectListSize = 0;
     }
 
     public void addObject(Sprite sprite){
-        _objectListSize++;
         _objectList.add(sprite);
     }
 
     public void update(){
-        //TODO: Figure out what makes garbage collector go all crazy
-        for (int i = 0; i < _objectListSize ; i++) {
-            _objectList.get(i).rotate(100 * Clock.getDelta());
-            _objectList.get(i).update();
+        for (Sprite sprite : _objectList) {
+            sprite.rotate(100.0f * Clock.getDelta());
+            //sprite.translate(1.0f * Clock.getDelta(), 0.0f);
+            sprite.update();
         }
     }
 
     public void draw(){
-        for (int i = 0; i < _objectListSize ; i++) {
-            _objectList.get(i).draw();
-        }
+        for (Sprite sprite : _objectList)
+            sprite.draw();
     }
 
 

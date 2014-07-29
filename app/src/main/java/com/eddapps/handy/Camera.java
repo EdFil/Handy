@@ -11,15 +11,15 @@ public class Camera {
     private float _positionX, _positionY;
     private float _rotation;
 
-    private Matrix4f _viewMatrix;
-    private Matrix4f _projectionMatrix;
+    private float[] _viewMatrix;
+    private float[] _projectionMatrix;
 
     //Constructors
     public Camera(int screenWidth, int screenHeight){
         _positionX = _positionY = 0.0f;
         _rotation = 0.0f;
-        _viewMatrix = new Matrix4f();
-        _projectionMatrix = new Matrix4f();
+        _viewMatrix = new float[16];
+        _projectionMatrix = new float[16];
         generateOrthographicProjection(screenWidth, screenHeight);
         generateViewMatrixDirty();
     }
@@ -28,34 +28,43 @@ public class Camera {
         generateOrthographicProjection(newScreenWidth, newScreenHeight);
         generateViewMatrixDirty();
     }
-
+//  0 1 2 3
+//  4 5 6 7
+//  5 6 7 8
+//  9 10 11 12
     private void generateViewMatrixDirty(){
-        //Left
-        _viewMatrix.set(0,0, 1.0f);
-        _viewMatrix.set(1,0, 0.0f);
-        _viewMatrix.set(2,0, 0.0f);
-        //Up
-        _viewMatrix.set(0,1, 0.0f);
-        _viewMatrix.set(1,1, 1.0f);
-        _viewMatrix.set(2,1, 0.0f);
-        //Forward
-        _viewMatrix.set(0,2, 0.0f);
-        _viewMatrix.set(1,2, 0.0f);
-        _viewMatrix.set(2,2, 1.0f);
-        //Translation
-        _viewMatrix.set(0,3, _positionX);
-        _viewMatrix.set(1,3, _positionY);
-        _viewMatrix.set(2,3, 0.0f);
+//        //Left
+//        _viewMatrix[0] = 1.0f;
+//        _viewMatrix[4] = 0.0f;
+//        _viewMatrix[8] = 0.0f;
+//        //Up
+//        _viewMatrix[1] = 0.0f;
+//        _viewMatrix[5] = 1.0f;
+//        _viewMatrix[9] =  0.0f;
+//        //Forward
+//        _viewMatrix[2] = 0.0f;
+//        _viewMatrix[6] = 0.0f;
+//        _viewMatrix[10] = 1.0f;
+//        //Translation
+//        _viewMatrix[3] = _positionX;
+//        _viewMatrix[7] = _positionY;
+//        _viewMatrix[11] = 1.0f;
+//        //Rest of matrix
+//        _viewMatrix[12] = 1.0f;
+//        _viewMatrix[13] = 1.0f;
+//        _viewMatrix[14] = 1.0f;
+//        _viewMatrix[15] = 1.0f;
+        Matrix.setLookAtM(_viewMatrix, 0, _positionX, _positionY, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
     }
 
     private void generateOrthographicProjection(int screenWidth, int screenHeight){
         float ratio = (float) screenWidth / screenHeight;
-        _projectionMatrix.loadOrtho(-ratio, ratio, -1, 1, -10, 10);
+        Matrix.orthoM(_projectionMatrix, 0, -ratio, ratio, -1, 1, -10, 10);
     }
 
     public void bindMatrices(){
-        ShaderProgramManager.getDefaultShader().setViewMatrix(_viewMatrix.getArray());
-        ShaderProgramManager.getDefaultShader().setProjectionMatrix(_projectionMatrix.getArray());
+        ShaderProgramManager.getDefaultShader().setViewMatrix(_viewMatrix);
+        ShaderProgramManager.getDefaultShader().setProjectionMatrix(_projectionMatrix);
     }
 
     //Update Function
@@ -64,6 +73,6 @@ public class Camera {
     }
 
     //Getters
-    public float[] getViewMatrixArray() { return _viewMatrix.getArray(); }
-    public float[] getProjectionMatrixArray() { return _projectionMatrix.getArray(); }
+    public float[] getViewMatrixArray() { return _viewMatrix; }
+    public float[] getProjectionMatrixArray() { return _projectionMatrix; }
 }
