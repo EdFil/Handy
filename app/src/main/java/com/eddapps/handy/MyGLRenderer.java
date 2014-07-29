@@ -14,7 +14,6 @@ public class MyGLRenderer implements Renderer {
     private int _width;
     private int _height;
 
-    private Clock _clock;
     private ObjectManager _objectManager;
     private Camera _camera;
 
@@ -67,7 +66,6 @@ public class MyGLRenderer implements Renderer {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
         // Bind ViewMatrix and ProjectionMatrix to the
         Clock.update();
-        Log.d("", Clock.getDelta() + "");
         _camera.bindMatrices();
         _objectManager.update();
         _objectManager.draw();

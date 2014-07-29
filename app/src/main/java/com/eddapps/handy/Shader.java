@@ -8,6 +8,7 @@ import android.util.Log;
  */
 public class Shader {
     private int _programID;
+    private int _colorLocation;
     private int _modelMatrixLocation;
     private int _viewMatrixLocation;
     private int _projectionMatrixLocation;
@@ -16,8 +17,8 @@ public class Shader {
     Shader() {
         _programID = createProgram(kVertexShader, kFragmentShader);
         GLES20.glBindAttribLocation(_programID, 0, "in_Position");
-        //GLES20.glBindAttribLocation(_programID, 1, "in_TextureCoordinate");
         GLES20.glLinkProgram(_programID);
+        _colorLocation = GLES20.glGetUniformLocation(_programID, "Color");
         _modelMatrixLocation = GLES20.glGetUniformLocation(_programID, "ModelMatrix");
         _viewMatrixLocation = GLES20.glGetUniformLocation(_programID, "ViewMatrix");
         _projectionMatrixLocation = GLES20.glGetUniformLocation(_programID, "ProjectionMatrix");
@@ -25,6 +26,11 @@ public class Shader {
 
     public void useProgram() {
         GLES20.glUseProgram(_programID);
+    }
+
+    public void setColor(float[] color){
+        GLES20.glUniform4f(_colorLocation, color[0], color[1], color[2], color[3]);
+        //GLES20.glUniform4fv(_colorLocation, 4, color, 0); does not work and i don't know why
     }
 
     public void setModelMatrix(float[] modelMatrix) {
@@ -75,17 +81,20 @@ public class Shader {
 
     private static final String kVertexShader =
             "attribute vec4 in_Position;                                                \n" +
-           // "attribute vec2 in_UV;                                                      \n" +
+            "uniform vec4 Color;                                                        \n" +
             "uniform mat4 ModelMatrix;                                                  \n" +
             "uniform mat4 ViewMatrix;                                                   \n" +
             "uniform mat4 ProjectionMatrix;                                             \n" +
+            "varying vec4 ex_Color;                                                     \n" +
             "                                                                           \n" +
             "void main() {                                                              \n" +
+            "  ex_Color = Color;                                                        \n" +
             "  gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * in_Position; \n" +
             "}                                                                          \n";
 
     private static final String kFragmentShader =
-            "void main() {                              " +
-            "  gl_FragColor = vec4(0.5,0,0,1);          " +
-            "}                                          ";
+            "varying vec4 ex_Color;                                                        \n" +
+            "void main() {                                                              \n" +
+            "  gl_FragColor = ex_Color;                                                    \n" +
+            "}                                                                          \n";
 }

@@ -18,12 +18,15 @@ public class Sprite {
     private float _rotation;
 
     private Matrix4f _modelMatrix;
+    private float[] _color;
+
     private int[] _vertexBufferID;
 
     public Sprite(){
 //        _positionX = _positionY = 0.0f;
         _positionX = (float) (Math.random() - 0.5f) * 3.0f;
         _positionY = (float) (Math.random() - 0.5f) * 2.0f;
+        _color = new float[] {(float)Math.random(), (float)Math.random(), (float)Math.random(), 1.0f};
         _scaleX = _scaleY = 1.0f;
         _rotation = 0.0f;
         _modelMatrix = new Matrix4f();
@@ -62,6 +65,7 @@ public class Sprite {
     public void draw(){
         ShaderProgramManager.getDefaultShader().useProgram();
         ShaderProgramManager.getDefaultShader().setModelMatrix(_modelMatrix.getArray());
+        ShaderProgramManager.getDefaultShader().setColor(_color);
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, _vertexBufferID[0]);
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 6);
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);

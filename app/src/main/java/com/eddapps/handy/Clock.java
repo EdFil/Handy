@@ -16,7 +16,7 @@ public class Clock {
     protected Clock(){
         deltaTime = 0;
         prevTime = 0;
-        currentTime = SystemClock.currentThreadTimeMillis();
+        currentTime = SystemClock.elapsedRealtime();
     }
 
     public static Clock init() {
@@ -31,8 +31,8 @@ public class Clock {
 
     public static void update(){
         instance.prevTime = instance.currentTime;
-        instance.currentTime = SystemClock.currentThreadTimeMillis();
-        instance.deltaTime = (instance.currentTime - instance.prevTime)/100.0f;
+        instance.currentTime = SystemClock.elapsedRealtime();
+        instance.deltaTime = (instance.currentTime - instance.prevTime)/1000.0f;
     }
 
 }

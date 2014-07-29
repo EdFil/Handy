@@ -23,6 +23,7 @@ public class ObjectManager {
     public void update(){
         //TODO: Figure out what makes garbage collector go all crazy
         for (int i = 0; i < _objectListSize ; i++) {
+            _objectList.get(i).rotate(100 * Clock.getDelta());
             _objectList.get(i).update();
         }
     }
