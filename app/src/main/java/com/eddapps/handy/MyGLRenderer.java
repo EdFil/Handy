@@ -7,6 +7,7 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Debug;
+import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
@@ -39,16 +40,16 @@ public class MyGLRenderer implements Renderer {
     public void onResume()
     {
 		/* Do stuff to resume the renderer */
-        _currentTime = System.currentTimeMillis();
+        _currentTime = SystemClock.elapsedRealtime();
     }
 
     @Override
     public void onDrawFrame(GL10 unused) {
-        _prevTime = System.currentTimeMillis();
+        _prevTime = SystemClock.elapsedRealtime();
         Render();
-        _currentTime = System.currentTimeMillis();
+        _currentTime = SystemClock.elapsedRealtime();
         frameTime = _currentTime - _prevTime;
-//        Log.d("", "Objects = " + _objectManager.getNumObjects() + " | time = " + frameTime);
+        Log.d("", "Objects = " + _objectManager.getNumObjects() + " | time = " + frameTime);
     }
 
     private void Render() {
@@ -83,7 +84,7 @@ public class MyGLRenderer implements Renderer {
         ShaderProgramManager.init();
 
         _objectManager = new ObjectManager();
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < 100; i++)
             _objectManager.addObject(new Sprite());
     }
 

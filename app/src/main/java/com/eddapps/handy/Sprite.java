@@ -61,7 +61,7 @@ public class Sprite extends GameObject {
     }
 
     public void update(){
-        Log.d("", "Scale = " + getScaleX());
+//        Log.d("", "Scale = " + getScaleX());
         setPosition(getPositionX() + getDirectionX() * getVelocityX() * Clock.getDelta(), getPositionY() + getDirectionY() * getVelocityY() * Clock.getDelta());
         Matrix.setIdentityM(getModelMatrix(), 0);
         Matrix.translateM(getModelMatrix(), 0, getPositionX(), getPositionY(), 0.0f);

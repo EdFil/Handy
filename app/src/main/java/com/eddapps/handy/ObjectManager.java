@@ -1,5 +1,7 @@
 package com.eddapps.handy;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 /**
@@ -25,17 +27,18 @@ public class ObjectManager {
     }
 
     public void update(Camera camera){
-        if(_objectsToAdd.size() > 0) {
-            _objectList.addAll(_objectsToAdd);
-            _objectsToAdd.clear();
-        }
-        _isOnCycle = true;
-        for (GameObject gameObject : _objectList) {
-//            gameObject.rotate(100.0f * Clock.getDelta());
-//            sprite.translate(1.0f * Clock.getDelta(), 0.0f);
-            gameObject.collide(camera);
-            gameObject.update();
-        }
+        try {
+            if (_objectsToAdd.size() > 0) {
+                _objectList.addAll(_objectsToAdd);
+                _objectsToAdd.clear();
+            }
+            _isOnCycle = true;
+            for (GameObject gameObject : _objectList) {
+                gameObject.collide(camera);
+                gameObject.update();
+            }
+        }catch (Exception e) { Log.e("", "OI"); }
+        //TODO: NEED to see this :S
     }
 
     public void draw(){

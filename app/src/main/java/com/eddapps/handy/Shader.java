@@ -85,7 +85,7 @@ public class Shader {
             "uniform mat4 ModelMatrix;                                                  \n" +
             "uniform mat4 ViewMatrix;                                                   \n" +
             "uniform mat4 ProjectionMatrix;                                             \n" +
-            "varying vec4 ex_Color;                                                     \n" +
+            "varying lowp vec4 ex_Color;                                                     \n" +
             "                                                                           \n" +
             "void main() {                                                              \n" +
             "  ex_Color = Color;                                                        \n" +
@@ -93,7 +93,7 @@ public class Shader {
             "}                                                                          \n";
 
     private static final String kFragmentShader =
-            "varying vec4 ex_Color;                                                        \n" +
+            "varying lowp vec4 ex_Color;                                                        \n" +
             "void main() {                                                              \n" +
             "  gl_FragColor = ex_Color;                                                    \n" +
             "}                                                                          \n";
