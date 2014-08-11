@@ -2,6 +2,10 @@ package com.eddapps.handy;
 
 import android.util.Log;
 
+import com.eddapps.handy.engine.cameras.Camera;
+import com.eddapps.handy.engine.objects.GameObject;
+import com.eddapps.handy.engine.objects.Sprite;
+
 import java.util.ArrayList;
 
 /**
@@ -34,7 +38,6 @@ public class ObjectManager {
             }
             _isOnCycle = true;
             for (GameObject gameObject : _objectList) {
-                gameObject.collide(camera);
                 gameObject.update();
             }
         }catch (Exception e) { Log.e("", "OI"); }

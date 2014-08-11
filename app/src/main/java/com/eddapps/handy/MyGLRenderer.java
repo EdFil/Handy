@@ -1,21 +1,27 @@
 package com.eddapps.handy;
 
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
-
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView.Renderer;
-import android.os.Debug;
 import android.os.SystemClock;
 import android.util.DisplayMetrics;
-import android.util.Log;
+
+import com.eddapps.handy.engine.cameras.Camera;
+import com.eddapps.handy.engine.cameras.OrthographicCamera;
+import com.eddapps.handy.engine.objects.Sprite;
+import com.eddapps.handy.engine.shaders.ShaderProgramManager;
+import com.eddapps.handy.engine.utils.Clock;
+import com.eddapps.handy.engine.utils.FPSCounter;
+
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL10;
 
 public class MyGLRenderer implements Renderer {
 
     private int _width;
     private int _height;
 
+    private FPSCounter _fpsCounter;
     private ObjectManager _objectManager;
     private Camera _camera;
 
@@ -49,7 +55,8 @@ public class MyGLRenderer implements Renderer {
         Render();
         _currentTime = SystemClock.elapsedRealtime();
         frameTime = _currentTime - _prevTime;
-        Log.d("", "Objects = " + _objectManager.getNumObjects() + " | time = " + frameTime);
+        _fpsCounter.addFrameTime(frameTime);
+        //Log.d("", "Objects = " + _objectManager.getNumObjects() + " | time = " + _fpsCounter.getAverage());
     }
 
     private void Render() {
@@ -57,10 +64,10 @@ public class MyGLRenderer implements Renderer {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
         // Bind ViewMatrix and ProjectionMatrix to the
         Clock.update();
-        _camera.bindMatrices();
+        ShaderProgramManager.getDefaultShader().setViewMatrix(_camera.getViewMatrixArray());
+        ShaderProgramManager.getDefaultShader().setProjectionMatrix(_camera.getProjectionMatrixArray());
         _objectManager.update(_camera);
         _objectManager.draw();
-
     }
 
 
@@ -79,13 +86,15 @@ public class MyGLRenderer implements Renderer {
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         GLES20.glClearColor(1.0f,1.0f,1.0f,1.0f);
         //Fase 1: Add objects to the scene
-        _camera = new Camera(_width, _height);
+        _camera = new OrthographicCamera(_width, _height);
         Clock.init();
         ShaderProgramManager.init();
+        _fpsCounter = new FPSCounter(30);
 
         _objectManager = new ObjectManager();
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 50; i++)
             _objectManager.addObject(new Sprite());
+
     }
 
     public void addObject(){
