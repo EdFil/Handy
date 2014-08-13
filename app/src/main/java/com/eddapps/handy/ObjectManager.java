@@ -1,10 +1,10 @@
 package com.eddapps.handy;
 
-import android.util.Log;
-
 import com.eddapps.handy.engine.cameras.Camera;
 import com.eddapps.handy.engine.objects.GameObject;
+import com.eddapps.handy.engine.objects.MovingObject;
 import com.eddapps.handy.engine.objects.Sprite;
+import com.eddapps.handy.engine.objects.StaticObject;
 
 import java.util.ArrayList;
 
@@ -13,52 +13,37 @@ import java.util.ArrayList;
  */
 public class ObjectManager {
 
-    private ArrayList<GameObject> _objectList;
-    private ArrayList<GameObject> _objectsToAdd;
-    private boolean _isOnCycle;
+    private ArrayList<StaticObject> mStaticObjectList;
+    private ArrayList<MovingObject> mMovingObjectList;
 
     ObjectManager(){
-        _isOnCycle = false;
-        _objectList = new ArrayList<GameObject>();
-        _objectsToAdd = new ArrayList<GameObject>();
+        mMovingObjectList = new ArrayList<MovingObject>();
+        mStaticObjectList = new ArrayList<StaticObject>();
     }
 
     public void addObject(Sprite sprite){
-       if(!_isOnCycle)
-           _objectList.add(sprite);
-       else
-           _objectsToAdd.add(sprite);
+        if(sprite instanceof MovingObject)
+            mMovingObjectList.add(sprite);
     }
 
     public void update(Camera camera){
-        try {
-            if (_objectsToAdd.size() > 0) {
-                _objectList.addAll(_objectsToAdd);
-                _objectsToAdd.clear();
-            }
-            _isOnCycle = true;
-            for (GameObject gameObject : _objectList) {
-                gameObject.update();
-            }
-        }catch (Exception e) { Log.e("", "OI"); }
-        //TODO: NEED to see this :S
+        for (GameObject gameObject : mMovingObjectList) {
+            gameObject.update();
+        }
     }
 
     public void draw(){
-        for (GameObject gameObject : _objectList)
+        for (GameObject gameObject : mStaticObjectList) {
             gameObject.draw();
-        _isOnCycle = false;
+        }
+        for (GameObject gameObject : mMovingObjectList) {
+            gameObject.draw();
+        }
     }
 
-    public void scaleAllObjects(float x) {
-        for (GameObject gameObject : _objectList)
-            gameObject.scale(x, x);
-        for (GameObject gameObject : _objectsToAdd)
-            gameObject.scale(x, x);
-    }
-
-    public int getNumObjects(){
-        return _objectList.size();
+    @Override
+    public String toString(){
+        return "ObjectManager: (S=" + mStaticObjectList + ")(M=" + mMovingObjectList + ")";
     }
 
 }

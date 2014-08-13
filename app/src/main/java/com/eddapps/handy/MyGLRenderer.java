@@ -64,9 +64,10 @@ public class MyGLRenderer implements Renderer {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
         // Bind ViewMatrix and ProjectionMatrix to the
         Clock.update();
+        _camera.update();
+        _objectManager.update(_camera);
         ShaderProgramManager.getDefaultShader().setViewMatrix(_camera.getViewMatrixArray());
         ShaderProgramManager.getDefaultShader().setProjectionMatrix(_camera.getProjectionMatrixArray());
-        _objectManager.update(_camera);
         _objectManager.draw();
     }
 
@@ -92,7 +93,7 @@ public class MyGLRenderer implements Renderer {
         _fpsCounter = new FPSCounter(30);
 
         _objectManager = new ObjectManager();
-        for (int i = 0; i < 50; i++)
+        for (int i = 0; i < 1000; i++)
             _objectManager.addObject(new Sprite());
 
     }
@@ -101,7 +102,7 @@ public class MyGLRenderer implements Renderer {
         _objectManager.addObject(new Sprite());
     }
 
-    public void scaleObjects(float x){
-        _objectManager.scaleAllObjects(x);
+    public void moveCamera(float dx, float dy) {
+        _camera.translate(-dx * Clock.getDelta() / 5, dy * Clock.getDelta() / 5);
     }
 }

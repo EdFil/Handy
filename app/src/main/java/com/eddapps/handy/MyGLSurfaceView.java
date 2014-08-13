@@ -53,16 +53,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
                 float dx = x - mPreviousX;
                 float dy = y - mPreviousY;
 
-                if(Math.abs(dx) > Math.abs(dy)) {
-                    if (dx > 0)
-                        mRenderer.addObject();
-                }
-                else{
-                   if (dy > 0)
-                        mRenderer.scaleObjects(-0.1f);
-                   else
-                        mRenderer.scaleObjects(0.1f);
-            }
+                mRenderer.moveCamera(dx, dy);
         }
 
         mPreviousX = x;

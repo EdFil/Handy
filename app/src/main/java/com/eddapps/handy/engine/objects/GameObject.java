@@ -1,5 +1,11 @@
 package com.eddapps.handy.engine.objects;
 
+import android.opengl.GLES20;
+
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+
 /**
  * Created by edgar on 29-07-2014.
  */
@@ -13,6 +19,7 @@ public abstract class GameObject {
     private float mVelocityX, mVelocityY;
     private float mAccelerationX, mAccelerationY;
 
+    private int[] mVertexBufferID;
     private float[] mModelMatrix;
     private float[] _color;
 
@@ -24,7 +31,7 @@ public abstract class GameObject {
         mDirectionX = (float) (Math.random() * 2 - 1f);
         mDirectionY = (float) (Math.random() * 2 - 1f);
         _color = new float[] {(float)Math.random(), (float)Math.random(), (float)Math.random(), 1.0f};
-        mScaleX = mScaleY = 1.0f; //(float)(Math.random() * 4);;
+        mScaleX = mScaleY = (float)(Math.random() * 4);;
         mRotation = 0.0f;
         mModelMatrix = new float[16];
     }
@@ -46,6 +53,7 @@ public abstract class GameObject {
     public float getAccelerationX() { return mAccelerationX; }
     public float getAccelerationY() { return mAccelerationY; }
     protected float[] getModelMatrix() { return mModelMatrix; }
+    protected int[] getVertexBuffer() { return mVertexBufferID; }
 
     //Setters
     public void setPosition(float x, float y){ mPositionX = x; mPositionY = y; }
@@ -65,6 +73,7 @@ public abstract class GameObject {
     public void setAcceleration(float accelerationX, float accelerationY) { mAccelerationX = accelerationX; mAccelerationY = accelerationY;}
     public void setAccelerationX(float accelerationX) { mAccelerationX = accelerationX; }
     public void setAccelerationY(float accelerationY) { mAccelerationY = accelerationY; }
+
     protected void setModelMatrix(float[] modelMatrix) {
         mModelMatrix[0] = modelMatrix[0];mModelMatrix[1] = modelMatrix[1];
         mModelMatrix[2] = modelMatrix[2];mModelMatrix[3] = modelMatrix[3];
@@ -74,6 +83,25 @@ public abstract class GameObject {
         mModelMatrix[10] = modelMatrix[10];mModelMatrix[11] = modelMatrix[11];
         mModelMatrix[12] = modelMatrix[12];mModelMatrix[13] = modelMatrix[13];
         mModelMatrix[14] = modelMatrix[14];mModelMatrix[15] = modelMatrix[15];
+    }
+
+    protected void setVertexBuffer(float[] vertexArray){
+        //Create the vertexBuffer
+        ByteBuffer bb = ByteBuffer.allocateDirect(vertexArray.length * 4); //4 bytes per float
+        bb.order(ByteOrder.nativeOrder());
+        FloatBuffer floatBuffer = bb.asFloatBuffer();
+        floatBuffer.put(vertexArray);
+        floatBuffer.position(0);
+
+        //Send the vertexBuffer to OpenGL
+        mVertexBufferID = new int[1];
+        GLES20.glGenBuffers(1, mVertexBufferID, 0);
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, mVertexBufferID[0]);
+        GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, vertexArray.length * Float.SIZE / 8, floatBuffer, GLES20.GL_STATIC_DRAW);
+        GLES20.glEnableVertexAttribArray(0);
+        GLES20.glVertexAttribPointer(0, 4, GLES20.GL_FLOAT, false, 4 * Float.SIZE / 8, 0);
+
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
     }
 
     //Transformations

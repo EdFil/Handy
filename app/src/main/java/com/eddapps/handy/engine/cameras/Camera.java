@@ -1,5 +1,7 @@
 package com.eddapps.handy.engine.cameras;
 
+import android.util.Log;
+
 /**
  * Created by Edgar on 10/07/2014.
  */
@@ -34,9 +36,7 @@ public abstract class Camera {
 
     //Update Function
     public void update(){
-        if(mNeedsUpdate){
-            //STUFF else SKIP
-        }
+            generateViewMatrix();
         //TODO: Updates the view matrix with the player's position
     }
 
@@ -79,5 +79,10 @@ public abstract class Camera {
         mPositionX += deltaX;
         mPositionY += deltaY;
         mNeedsUpdate = true;
+        Log.v("asdasd", this.toString());
+    }
+
+    public String toString(){
+        return "Camera: X=" + mPositionX + " Y=" + mPositionY;
     }
 }
