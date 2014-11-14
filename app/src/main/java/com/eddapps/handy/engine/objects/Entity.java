@@ -41,7 +41,7 @@ public class Entity {
     }
 
     public void update(){
-
+        reloadModelMatrix();
     }
 
     public void reloadModelMatrix(){

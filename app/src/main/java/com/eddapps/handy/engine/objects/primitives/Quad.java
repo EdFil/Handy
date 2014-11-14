@@ -28,8 +28,7 @@ public class Quad extends Primitive {
     }
 
     public void update(){
-        //rotate(10 * Clock.getDelta());
-        reloadModelMatrix();
+        super.update();
     }
 
     public void draw(){

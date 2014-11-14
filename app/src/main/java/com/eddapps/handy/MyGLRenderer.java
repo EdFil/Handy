@@ -8,7 +8,9 @@ import android.util.DisplayMetrics;
 
 import com.eddapps.handy.engine.cameras.Camera;
 import com.eddapps.handy.engine.cameras.OrthographicCamera;
+import com.eddapps.handy.engine.objects.primitives.Primitive;
 import com.eddapps.handy.engine.objects.primitives.Quad;
+import com.eddapps.handy.engine.objects.primitives.Triangle;
 import com.eddapps.handy.engine.objects.sprite.Sprite;
 import com.eddapps.handy.engine.opengl.shaders.ShaderProgramManager;
 import com.eddapps.handy.engine.utils.Clock;
@@ -25,7 +27,7 @@ public class MyGLRenderer implements Renderer {
     private FPSCounter _fpsCounter;
     private ObjectManager _objectManager;
     private Camera _camera;
-    private Sprite mSprite;
+    private Primitive mPrimitive;
 
     // Misc
     Context mContext;
@@ -69,8 +71,8 @@ public class MyGLRenderer implements Renderer {
         _camera.update();
         ShaderProgramManager.getPositionColorShader().setViewMatrix(_camera.getViewMatrixArray());
         ShaderProgramManager.getPositionColorShader().setProjectionMatrix(_camera.getProjectionMatrixArray());
-        mSprite.update();
-        mSprite.draw();
+        mPrimitive.update();
+        mPrimitive.draw();
     }
 
 
@@ -93,7 +95,7 @@ public class MyGLRenderer implements Renderer {
         Clock.init();
         ShaderProgramManager.init();
         _fpsCounter = new FPSCounter(30);
-        mSprite = new Sprite();
+        mPrimitive = new Triangle();
     }
 
     public void addObject(){
