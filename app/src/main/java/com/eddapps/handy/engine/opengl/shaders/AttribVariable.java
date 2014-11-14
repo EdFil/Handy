@@ -1,4 +1,4 @@
-package com.eddapps.handy.engine.shaders;
+package com.eddapps.handy.engine.opengl.shaders;
 
 /**
  * Created by Edgar on 11/08/2014.

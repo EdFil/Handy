@@ -1,18 +1,19 @@
-package com.eddapps.handy.engine.shaders.programs;
+package com.eddapps.handy.engine.opengl.shaders.programs;
 
 import android.opengl.GLES20;
 
-import com.eddapps.handy.engine.shaders.AttribVariable;
+import com.eddapps.handy.engine.opengl.shaders.AttribVariable;
 
 /**
  * Created by Edgar on 10/07/2014.
  */
-public class DefaultShaderProgram extends ShaderProgram {
+public class PositionColorTextureShaderProgram extends PositionColorShaderProgram {
 
-    private int mColorLocation;
+    private int mTextureLocation;
 
     private static final AttribVariable[] mProgramVariables = {
-            AttribVariable.in_Position
+            AttribVariable.in_Position,
+            AttribVariable.a_TexCoordinate
     };
 
     private static final String mVertexShader =
@@ -30,18 +31,19 @@ public class DefaultShaderProgram extends ShaderProgram {
 
     private static final String mFragmentShader =
             "varying lowp vec4 ex_Color;                                                \n" +
+            "varying lowp vec2 in_TexCoordinate;                                        \n" +
+            "uniform sampler2D Texture;                                                 \n" +
             "void main() {                                                              \n" +
-            "  gl_FragColor = ex_Color;                                                 \n" +
+            "  gl_FragColor = texture(Texture, in_TexCoordinate);                       \n" +
             "}                                                                          \n";
 
 
-    public DefaultShaderProgram() {
+    public PositionColorTextureShaderProgram() {
         super(mVertexShader, mFragmentShader, mProgramVariables);
-        mColorLocation = GLES20.glGetUniformLocation(getProgramHandle(), "Color");
+        mTextureLocation = GLES20.glGetUniformLocation(getProgramHandle(), "Texture");
     }
 
-    public void setColor(float[] color){
-        GLES20.glUniform4f(mColorLocation, color[0], color[1], color[2], color[3]);
-        //GLES20.glUniform4fv(mColorLocation, 4, color, 0); does not work and i don't know why
+    public void setTexture(float a){
+        //GLES20.glUniform4f(mColorLocation, r, g, b, a);
     }
 }

@@ -4,7 +4,7 @@ import android.opengl.GLES20;
 import android.opengl.GLU;
 import android.util.Log;
 
-import com.eddapps.handy.engine.shaders.AttribVariable;
+import com.eddapps.handy.engine.opengl.shaders.AttribVariable;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

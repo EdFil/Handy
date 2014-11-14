@@ -8,9 +8,9 @@ import android.util.DisplayMetrics;
 
 import com.eddapps.handy.engine.cameras.Camera;
 import com.eddapps.handy.engine.cameras.OrthographicCamera;
-import com.eddapps.handy.engine.objects.Sprite;
 import com.eddapps.handy.engine.objects.primitives.Quad;
-import com.eddapps.handy.engine.shaders.ShaderProgramManager;
+import com.eddapps.handy.engine.objects.sprite.Sprite;
+import com.eddapps.handy.engine.opengl.shaders.ShaderProgramManager;
 import com.eddapps.handy.engine.utils.Clock;
 import com.eddapps.handy.engine.utils.FPSCounter;
 
@@ -25,7 +25,7 @@ public class MyGLRenderer implements Renderer {
     private FPSCounter _fpsCounter;
     private ObjectManager _objectManager;
     private Camera _camera;
-    private Quad _quad;
+    private Sprite mSprite;
 
     // Misc
     Context mContext;
@@ -67,10 +67,10 @@ public class MyGLRenderer implements Renderer {
         // Bind ViewMatrix and ProjectionMatrix to the
         Clock.update();
         _camera.update();
-        ShaderProgramManager.getDefaultShader().setViewMatrix(_camera.getViewMatrixArray());
-        ShaderProgramManager.getDefaultShader().setProjectionMatrix(_camera.getProjectionMatrixArray());
-        _quad.update();
-        _quad.draw();
+        ShaderProgramManager.getPositionColorShader().setViewMatrix(_camera.getViewMatrixArray());
+        ShaderProgramManager.getPositionColorShader().setProjectionMatrix(_camera.getProjectionMatrixArray());
+        mSprite.update();
+        mSprite.draw();
     }
 
 
@@ -93,8 +93,7 @@ public class MyGLRenderer implements Renderer {
         Clock.init();
         ShaderProgramManager.init();
         _fpsCounter = new FPSCounter(30);
-        _quad = new Quad(-0.5f,-0.5f,1.0f,1.0f);
-
+        mSprite = new Sprite();
     }
 
     public void addObject(){

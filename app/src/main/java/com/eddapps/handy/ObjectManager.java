@@ -1,10 +1,9 @@
 package com.eddapps.handy;
 
 import com.eddapps.handy.engine.cameras.Camera;
-import com.eddapps.handy.engine.objects.GameObject;
 import com.eddapps.handy.engine.objects.MovingObject;
-import com.eddapps.handy.engine.objects.Sprite;
 import com.eddapps.handy.engine.objects.StaticObject;
+import com.eddapps.handy.engine.objects.sprite.Sprite;
 
 import java.util.ArrayList;
 
@@ -22,28 +21,20 @@ public class ObjectManager {
     }
 
     public void addObject(Sprite sprite){
-        if(sprite instanceof MovingObject)
-            mMovingObjectList.add(sprite);
+
     }
 
     public void update(Camera camera){
-        for (GameObject gameObject : mMovingObjectList) {
-            gameObject.update();
-        }
+
     }
 
     public void draw(){
-        for (GameObject gameObject : mStaticObjectList) {
-            gameObject.draw();
-        }
-        for (GameObject gameObject : mMovingObjectList) {
-            gameObject.draw();
-        }
+
     }
 
     @Override
     public String toString(){
-        return "ObjectManager: (S=" + mStaticObjectList + ")(M=" + mMovingObjectList + ")";
+        return "";
     }
 
 }

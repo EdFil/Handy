@@ -1,6 +1,6 @@
-package com.eddapps.handy.engine.shaders;
+package com.eddapps.handy.engine.opengl.shaders;
 
-import com.eddapps.handy.engine.shaders.programs.DefaultShaderProgram;
+import com.eddapps.handy.engine.opengl.shaders.programs.PositionColorShaderProgram;
 
 /**
  * Created by edgar on 29-07-2014.
@@ -18,15 +18,15 @@ public class ShaderProgramManager {
 
     // ******** Shader Manager ********
 
-    public DefaultShaderProgram DEFAULT_SHADER_PROGRAM = null;
+    public PositionColorShaderProgram DEFAULT_SHADER_PROGRAM = null;
 
     protected ShaderProgramManager(){
-       DEFAULT_SHADER_PROGRAM = new DefaultShaderProgram();
+       DEFAULT_SHADER_PROGRAM = new PositionColorShaderProgram();
     }
 
-    public static DefaultShaderProgram getDefaultShader(){
+    public static PositionColorShaderProgram getPositionColorShader(){
         if(_instance.DEFAULT_SHADER_PROGRAM == null)
-            _instance.DEFAULT_SHADER_PROGRAM = new DefaultShaderProgram();
+            _instance.DEFAULT_SHADER_PROGRAM = new PositionColorShaderProgram();
         return _instance.DEFAULT_SHADER_PROGRAM;
     }
 }

@@ -22,6 +22,7 @@ public class Clock {
     public static Clock init() {
         if(instance == null)
             instance = new Clock();
+
         return instance;
     }
 

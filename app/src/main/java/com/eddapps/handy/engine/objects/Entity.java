@@ -11,9 +11,11 @@ import java.util.Arrays;
  */
 public class Entity {
 
-    private static final float DEFAULT_X_SCALE = 1.0f;
-    private static final float DEFAULT_Y_SCALE = 1.0f;
-    private static final float DEFAULT_ROTATION = 0.0f;
+    private static float DEFAULT_POSITION_X = 0.0f;
+    private static float DEFAULT_POSITION_Y = 0.0f;
+    private static float DEFAULT_SCALE_X = 1.0f;
+    private static float DEFAULT_SCALE_Y = 1.0f;
+    private static float DEFAULT_ROTATION = 0.0f;
 
     private float mPositionX, mPositionY;
     private float mScaleX, mScaleY;
@@ -21,12 +23,20 @@ public class Entity {
 
     private float[] mModelMatrix;
 
+    public Entity(){
+        this(DEFAULT_POSITION_X, DEFAULT_POSITION_Y, DEFAULT_SCALE_X, DEFAULT_SCALE_Y, DEFAULT_ROTATION);
+    }
+
     public Entity(float positionX, float positionY){
+        this(positionX, positionY, DEFAULT_SCALE_X, DEFAULT_SCALE_Y, DEFAULT_ROTATION);
+    }
+
+    public Entity(float positionX, float positionY, float scaleX, float scaleY, float rotation){
         mPositionX = positionX;
         mPositionY = positionY;
-        mScaleX = DEFAULT_X_SCALE;
-        mScaleY = DEFAULT_Y_SCALE;
-        mRotation = DEFAULT_ROTATION;
+        mScaleX = scaleX;
+        mScaleY = scaleY;
+        mRotation = rotation;
         mModelMatrix = new float[16];
     }
 
@@ -64,3 +74,4 @@ public class Entity {
     }
 
 }
+
