@@ -1,8 +1,8 @@
-package com.eddapps.handy.engine.opengl.shaders.programs;
+package com.eddapps.handy.engine.opengl.shader.programs;
 
 import android.opengl.GLES20;
 
-import com.eddapps.handy.engine.opengl.shaders.AttribVariable;
+import com.eddapps.handy.engine.opengl.shader.AttribVariable;
 import com.eddapps.handy.engine.utils.Utilities;
 
 /**

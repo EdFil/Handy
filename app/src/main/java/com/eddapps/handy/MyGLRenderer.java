@@ -8,13 +8,14 @@ import android.util.DisplayMetrics;
 
 import com.eddapps.handy.engine.cameras.Camera;
 import com.eddapps.handy.engine.cameras.OrthographicCamera;
-import com.eddapps.handy.engine.objects.primitives.Primitive;
-import com.eddapps.handy.engine.objects.primitives.Quad;
-import com.eddapps.handy.engine.objects.primitives.Triangle;
+import com.eddapps.handy.engine.objects.primitive.Primitive;
+import com.eddapps.handy.engine.objects.primitive.Quad;
+import com.eddapps.handy.engine.objects.primitive.Triangle;
 import com.eddapps.handy.engine.objects.sprite.Sprite;
-import com.eddapps.handy.engine.opengl.shaders.ShaderProgramManager;
+import com.eddapps.handy.engine.opengl.shader.ShaderProgramManager;
 import com.eddapps.handy.engine.utils.Clock;
 import com.eddapps.handy.engine.utils.FPSCounter;
+import com.eddapps.handy.engine.utils.Utilities;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -69,8 +70,8 @@ public class MyGLRenderer implements Renderer {
         // Bind ViewMatrix and ProjectionMatrix to the
         Clock.update();
         _camera.update();
-        ShaderProgramManager.getPositionColorShader().setViewMatrix(_camera.getViewMatrixArray());
-        ShaderProgramManager.getPositionColorShader().setProjectionMatrix(_camera.getProjectionMatrixArray());
+        ShaderProgramManager.getPositionColorTextureShader().setViewMatrix(_camera.getViewMatrixArray());
+        ShaderProgramManager.getPositionColorTextureShader().setProjectionMatrix(_camera.getProjectionMatrixArray());
         mPrimitive.update();
         mPrimitive.draw();
     }
@@ -95,7 +96,8 @@ public class MyGLRenderer implements Renderer {
         Clock.init();
         ShaderProgramManager.init();
         _fpsCounter = new FPSCounter(30);
-        mPrimitive = new Triangle();
+        mPrimitive = new Sprite();
+        ((Sprite)mPrimitive).mTextureHandle = Utilities.loadTexture(mContext, R.drawable.ic_launcher);
     }
 
     public void addObject(){

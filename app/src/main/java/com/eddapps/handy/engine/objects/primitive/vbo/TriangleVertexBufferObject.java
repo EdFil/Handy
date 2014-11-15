@@ -1,22 +1,20 @@
-package com.eddapps.handy.engine.objects.primitives.vbo;
+package com.eddapps.handy.engine.objects.primitive.vbo;
 
 import android.opengl.GLES20;
 
 import com.eddapps.handy.engine.objects.Entity;
-import com.eddapps.handy.engine.objects.primitives.Quad;
 import com.eddapps.handy.engine.opengl.vbo.VertexBufferObject;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
 
 /**
  * Created by edgar on 13-11-2014.
  */
-public class QuadVertexBufferObject extends VertexBufferObject {
+public class TriangleVertexBufferObject extends VertexBufferObject {
 
-    public QuadVertexBufferObject(){
-        mByteBuffer = ByteBuffer.allocateDirect(8 * 4); // 8 floats, 4 bytes per float
+    public TriangleVertexBufferObject(){
+        mByteBuffer = ByteBuffer.allocateDirect(6 * 4); // 6 floats, 4 bytes per float
         mByteBuffer.order(ByteOrder.nativeOrder());
         mFloatBuffer = mByteBuffer.asFloatBuffer();
     }
@@ -37,9 +35,6 @@ public class QuadVertexBufferObject extends VertexBufferObject {
         //BottomLeft
         mFloatBuffer.put(X1);
         mFloatBuffer.put(Y1);
-        //TopLeft
-        mFloatBuffer.put(X1);
-        mFloatBuffer.put(Y2);
 
         mFloatBuffer.position(0);
 
@@ -57,7 +52,7 @@ public class QuadVertexBufferObject extends VertexBufferObject {
     @Override
     public void draw() {
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, mVertexBufferID[0]);
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, mFloatBuffer.capacity());
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 3);
     }
 
 

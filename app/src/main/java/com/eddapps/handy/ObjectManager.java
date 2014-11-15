@@ -1,8 +1,7 @@
 package com.eddapps.handy;
 
 import com.eddapps.handy.engine.cameras.Camera;
-import com.eddapps.handy.engine.objects.MovingObject;
-import com.eddapps.handy.engine.objects.StaticObject;
+import com.eddapps.handy.engine.objects.Entity;
 import com.eddapps.handy.engine.objects.sprite.Sprite;
 
 import java.util.ArrayList;
@@ -12,15 +11,11 @@ import java.util.ArrayList;
  */
 public class ObjectManager {
 
-    private ArrayList<StaticObject> mStaticObjectList;
-    private ArrayList<MovingObject> mMovingObjectList;
 
     ObjectManager(){
-        mMovingObjectList = new ArrayList<MovingObject>();
-        mStaticObjectList = new ArrayList<StaticObject>();
     }
 
-    public void addObject(Sprite sprite){
+    public void addObject(Entity entity){
 
     }
 

@@ -1,19 +1,18 @@
-package com.eddapps.handy.engine.opengl.shaders.programs;
+package com.eddapps.handy.engine.opengl.shader.programs;
 
 import android.opengl.GLES20;
 
-import com.eddapps.handy.engine.opengl.shaders.AttribVariable;
+import com.eddapps.handy.engine.opengl.shader.AttribVariable;
 
 /**
  * Created by Edgar on 10/07/2014.
  */
-public class PositionColorTextureShaderProgram extends PositionColorShaderProgram {
+public class PositionColorShaderProgram extends ShaderProgram {
 
-    private int mTextureLocation;
+    private int mColorLocation;
 
     private static final AttribVariable[] mProgramVariables = {
-            AttribVariable.in_Position,
-            AttribVariable.a_TexCoordinate
+            AttribVariable.in_Position
     };
 
     private static final String mVertexShader =
@@ -31,19 +30,25 @@ public class PositionColorTextureShaderProgram extends PositionColorShaderProgra
 
     private static final String mFragmentShader =
             "varying lowp vec4 ex_Color;                                                \n" +
-            "varying lowp vec2 in_TexCoordinate;                                        \n" +
-            "uniform sampler2D Texture;                                                 \n" +
             "void main() {                                                              \n" +
-            "  gl_FragColor = texture(Texture, in_TexCoordinate);                       \n" +
+            "  gl_FragColor = ex_Color;                                                 \n" +
             "}                                                                          \n";
 
 
-    public PositionColorTextureShaderProgram() {
-        super(mVertexShader, mFragmentShader, mProgramVariables);
-        mTextureLocation = GLES20.glGetUniformLocation(getProgramHandle(), "Texture");
+    public PositionColorShaderProgram() {
+        this(mVertexShader, mFragmentShader, mProgramVariables);
     }
 
-    public void setTexture(float a){
-        //GLES20.glUniform4f(mColorLocation, r, g, b, a);
+    protected PositionColorShaderProgram(final String vertexShader, final String fragmentShader, final AttribVariable[] programVariables){
+        super(vertexShader, fragmentShader, programVariables);
+        mColorLocation = GLES20.glGetUniformLocation(getProgramHandle(), "Color");
+    }
+
+    public void setColor(float r, float g, float b, float a){
+        GLES20.glUniform4f(mColorLocation, r, g, b, a);
+    }
+
+    public void setColor(float[] color){
+        GLES20.glUniform4f(mColorLocation, color[0], color[1], color[2], color[3]);
     }
 }

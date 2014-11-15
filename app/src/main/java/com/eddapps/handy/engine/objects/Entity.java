@@ -41,6 +41,8 @@ public class Entity {
     }
 
     public void update(){
+        //translate(0.0f, 1.0f*Clock.getDelta());
+        //rotate(10 * Clock.getDelta());
         reloadModelMatrix();
     }
 
@@ -71,6 +73,10 @@ public class Entity {
     //
     public void rotate(float amount){
         mRotation += amount;
+    }
+    public void translate(float xAmount, float yAmount){
+        mPositionX += xAmount;
+        mPositionY += yAmount;
     }
 
 }
