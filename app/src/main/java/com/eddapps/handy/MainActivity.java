@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 /**
  * Created by Edgar on 09/07/2014.
@@ -27,11 +28,11 @@ public class MainActivity extends Activity {
         // Fullscreen mode
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        // We create our Surface view for our OpenGL here.
-        glSurfaceView = new MyGLSurfaceView(this);
-
         // Set our view.
         setContentView(R.layout.activity_main);
+
+        // We create our Surface view for our OpenGL here.
+        glSurfaceView = new MyGLSurfaceView(this);
 
         // Retrieve our Relative layout from our main layout we just set to our view.
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.gameLayout);

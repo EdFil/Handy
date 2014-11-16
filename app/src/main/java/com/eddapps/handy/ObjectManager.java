@@ -1,8 +1,12 @@
 package com.eddapps.handy;
 
+import android.content.Context;
+
 import com.eddapps.handy.engine.cameras.Camera;
 import com.eddapps.handy.engine.objects.Entity;
+import com.eddapps.handy.engine.objects.primitive.Primitive;
 import com.eddapps.handy.engine.objects.sprite.Sprite;
+import com.eddapps.handy.engine.utils.Utilities;
 
 import java.util.ArrayList;
 
@@ -11,20 +15,28 @@ import java.util.ArrayList;
  */
 public class ObjectManager {
 
+    private ArrayList<Primitive> mObjectList;
 
     ObjectManager(){
+        mObjectList = new ArrayList<Primitive>();
     }
 
-    public void addObject(Entity entity){
-
+    public void addObject(Primitive entity){
+        mObjectList.add(entity);
     }
 
-    public void update(Camera camera){
-
+    public void update(){
+        for(Primitive primitive : mObjectList)
+            primitive.update();
     }
 
     public void draw(){
+        for(Primitive primitive : mObjectList)
+            primitive.draw();
+    }
 
+    public int getNumObjects(){
+        return mObjectList.size();
     }
 
     @Override

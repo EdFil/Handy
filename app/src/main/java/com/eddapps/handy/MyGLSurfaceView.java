@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.view.MotionEvent;
+import android.widget.TextView;
 
 /**
  * Created by Edgar on 09/07/2014.
@@ -12,6 +13,7 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
     private float mPreviousX, mPreviousY;
     private final MyGLRenderer mRenderer;
+    private TextView mTextView;
 
     public MyGLSurfaceView(Context context) {
         super(context);
@@ -40,24 +42,6 @@ public class MyGLSurfaceView extends GLSurfaceView {
 
     @SuppressLint("ClickableViewAccessibility") @Override
     public boolean onTouchEvent(MotionEvent e) {
-        // MotionEvent reports input details from the touch screen
-        // and other input controls. In this case, you are only
-        // interested in events where the touch position changed.
-
-        float x = e.getX();
-        float y = e.getY();
-
-        switch (e.getAction()) {
-            case MotionEvent.ACTION_MOVE:
-
-                float dx = x - mPreviousX;
-                float dy = y - mPreviousY;
-
-                mRenderer.moveCamera(dx, dy);
-        }
-
-        mPreviousX = x;
-        mPreviousY = y;
         return true;
     }
 }

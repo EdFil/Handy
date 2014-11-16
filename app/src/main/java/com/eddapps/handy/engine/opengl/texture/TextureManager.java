@@ -5,45 +5,62 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
+import android.util.Log;
+
+import com.eddapps.handy.engine.utils.Pair;
+import com.eddapps.handy.engine.utils.Utilities;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by edgar on 15-11-2014.
  */
 public class TextureManager {
 
-    public int[] textureHandle = new int[1];
+    private static final String TAG = TextureManager.class.getSimpleName();
 
-    public int loadTexture(Context context, final int resourceID){
-        GLES20.glGenTextures(1, textureHandle, 0);
+    private HashMap<Integer, Pair<Integer, Integer>> mLoadedTextures;
+    private HashMap<Integer, Pair<Integer, Integer>> mTexturesToBeLoaded;
 
-        if (textureHandle[0] != 0)
-        {
-            final BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inScaled = false;   // No pre-scaling
-
-            // Read in the resource
-            final Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resourceID, options);
-
-            // Bind to the texture in OpenGL
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
-
-            // Set filtering
-            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
-            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
-
-            // Load the bitmap into the bound texture.
-            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
-
-            // Recycle the bitmap, since its data has been loaded into OpenGL.
-            bitmap.recycle();
-        }
-
-        if (textureHandle[0] == 0)
-        {
-            throw new RuntimeException("Error loading texture.");
-        }
-
-        return textureHandle[0];
+    public TextureManager(){
+        mLoadedTextures = new HashMap<Integer, Pair<Integer, Integer>>();
+        mTexturesToBeLoaded = new HashMap<Integer, Pair<Integer, Integer>>();
     }
 
+    public int loadTextureFromResource(final int resourceID){
+        if(mLoadedTextures.containsKey(resourceID)){
+            Log.d(TAG, resourceID + " was already loaded.");
+            //If texture already loaded
+            mLoadedTextures.get(resourceID).second++;
+            return mLoadedTextures.get(resourceID).first;
+
+        }
+        if(mTexturesToBeLoaded.containsKey(resourceID)){
+            Log.d(TAG, resourceID + " was already set to be loaded.");
+            //If texture is going to be loaded already
+            mTexturesToBeLoaded.get(resourceID).second++;
+        }else{
+            Log.d(TAG, resourceID + " is being prepared to be loaded.");
+            //If never seen this resourceID
+            int[] textureHandle = new int[1];
+            GLES20.glGenTextures(1, textureHandle, 0);
+            mTexturesToBeLoaded.put(resourceID, new Pair<Integer, Integer>(textureHandle[0], 1));
+        }
+
+        return mTexturesToBeLoaded.get(resourceID).first;
+    }
+
+    public void loadUnloadedTextures(Context context){
+        if(mTexturesToBeLoaded.size() > 0) {
+            Log.d(TAG, "Loading " + mTexturesToBeLoaded.size() + " unloaded textures...");
+            for (int resourceID : mTexturesToBeLoaded.keySet()) {
+                Log.d(TAG, "Loading " + resourceID + ".");
+                Utilities.loadTexture(context, resourceID);
+            }
+            Log.d(TAG, "Finished loading textures...");
+            mLoadedTextures.putAll(mTexturesToBeLoaded);
+            mTexturesToBeLoaded.clear();
+        }
+    }
 }

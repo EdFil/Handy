@@ -5,6 +5,7 @@ import android.opengl.Matrix;
 import com.eddapps.handy.engine.utils.Clock;
 
 import java.util.Arrays;
+import java.util.Random;
 
 /**
  * Created by edgar on 13-11-2014.
@@ -32,25 +33,26 @@ public class Entity {
     }
 
     public Entity(float positionX, float positionY, float scaleX, float scaleY, float rotation){
-        mPositionX = positionX;
-        mPositionY = positionY;
-        mScaleX = scaleX;
-        mScaleY = scaleY;
+        Random rnd = new Random();
+        mPositionX = rnd.nextFloat() * 3 - 1.5f;
+        mPositionY = rnd.nextFloat() * 3 - 1.5f;
+        mScaleX = rnd.nextFloat();
+        mScaleY = rnd.nextFloat();
         mRotation = rotation;
         mModelMatrix = new float[16];
     }
 
     public void update(){
         //translate(0.0f, 1.0f*Clock.getDelta());
-        //rotate(10 * Clock.getDelta());
+        rotate(10 * Clock.getDelta());
         reloadModelMatrix();
     }
 
     public void reloadModelMatrix(){
         Matrix.setIdentityM(mModelMatrix, 0);
+        Matrix.translateM(mModelMatrix, 0, mPositionX, mPositionY, 0.0f);
         Matrix.scaleM(mModelMatrix, 0, mScaleX, mScaleY, 1.0f);
         Matrix.rotateM(mModelMatrix, 0, mRotation, 0, 0, 1);
-        Matrix.translateM(mModelMatrix, 0, mPositionX, mPositionY, 0.0f);
     }
 
     //Getters
