@@ -27,6 +27,10 @@ public class Quad extends Primitive {
         this(new QuadVertexBufferObject(), ShaderProgramManager.getPositionColorShader());
     }
 
+    public Quad(float positionX, float positionY){
+        this(new QuadVertexBufferObject(), ShaderProgramManager.getPositionColorShader());
+    }
+
     public Quad(VertexBufferObject vertexBufferObject, ShaderProgram shaderProgram){
         super(vertexBufferObject, shaderProgram);
         mShaderProgram = (PositionColorShaderProgram)getShaderProgram();

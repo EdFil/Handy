@@ -10,10 +10,13 @@ import android.util.Log;
 
 import com.eddapps.handy.engine.cameras.Camera;
 import com.eddapps.handy.engine.cameras.OrthographicCamera;
+import com.eddapps.handy.engine.objects.primitive.vbo.QuadVertexBufferObject;
+import com.eddapps.handy.engine.objects.primitive.vbo.TriangleVertexBufferObject;
 import com.eddapps.handy.engine.objects.sprite.Sprite;
+import com.eddapps.handy.engine.objects.sprite.vbo.SpriteVertexBufferObject;
 import com.eddapps.handy.engine.opengl.shader.ShaderProgramManager;
-import com.eddapps.handy.engine.opengl.shader.programs.ShaderProgram;
 import com.eddapps.handy.engine.opengl.texture.TextureManager;
+import com.eddapps.handy.engine.opengl.vbo.VertexBufferObjectManager;
 import com.eddapps.handy.engine.utils.Clock;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -31,13 +34,12 @@ public class MyGLRenderer implements Renderer {
     private Camera mCamera;
     private ObjectManager mObjectManager;
     private TextureManager mTextureManager;
-    private ShaderProgramManager mShaderProgramManager;
+    private VertexBufferObjectManager mVertexObjectManager;
 
     // Misc
     int frames = 0;
     Context mContext;
-    long _currentTime = 0, _prevTime = 0;
-    long frameTime;
+    long _currentTime = 0;
 
     public MyGLRenderer(Context c){
         mContext = c;
@@ -107,8 +109,18 @@ public class MyGLRenderer implements Renderer {
         mCamera = new OrthographicCamera(_width, _height);
         mObjectManager = new ObjectManager();
         mTextureManager = new TextureManager();
+        mVertexObjectManager = new VertexBufferObjectManager();
+
+        mVertexObjectManager.loadVertexBufferObject(QuadVertexBufferObject.class);
+        mVertexObjectManager.loadVertexBufferObject(QuadVertexBufferObject.class);
+        mVertexObjectManager.loadVertexBufferObject(SpriteVertexBufferObject.class);
+        mVertexObjectManager.loadVertexBufferObject(TriangleVertexBufferObject.class);
+        mVertexObjectManager.loadVertexBufferObject(SpriteVertexBufferObject.class);
+
+        mVertexObjectManager.loadUnloadedVBO();
+
         ShaderProgramManager.init();
-        for(int i = 0; i < 600; i++) {
+        for(int i = 0; i < 50; i++) {
             Sprite sprite = new Sprite();
             sprite.setTexture(mTextureManager, R.drawable.ic_launcher);
             mObjectManager.addObject(new Sprite());
@@ -116,13 +128,5 @@ public class MyGLRenderer implements Renderer {
         Clock.init();
         ShaderProgramManager.init();
         runnable.run();
-    }
-
-    public void addObject(){
-
-    }
-
-    public void moveCamera(float dx, float dy) {
-        mCamera.translate(-dx * Clock.getDelta() / 5, dy * Clock.getDelta() / 5);
     }
 }

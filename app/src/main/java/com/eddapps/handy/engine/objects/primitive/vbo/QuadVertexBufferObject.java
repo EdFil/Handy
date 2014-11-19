@@ -17,12 +17,9 @@ public class QuadVertexBufferObject extends VertexBufferObject {
         mByteBuffer = ByteBuffer.allocateDirect(8 * 4); // 8 floats, 4 bytes per float
         mByteBuffer.order(ByteOrder.nativeOrder());
         mFloatBuffer = mByteBuffer.asFloatBuffer();
-    }
 
-    @Override
-    public void updateBuffer(Entity entity){
-        final float X1 = -entity.getScaleX()/2.0f;
-        final float Y1 = -entity.getScaleY()/2.0f;
+        final float X1 = -DEFAULT_X_SCALE/2.0f;
+        final float Y1 = -DEFAULT_Y_SCALE/2.0f;
         final float X2 = -X1;
         final float Y2 = -Y1;
 
@@ -40,7 +37,11 @@ public class QuadVertexBufferObject extends VertexBufferObject {
         mFloatBuffer.put(Y2);
 
         mFloatBuffer.position(0);
+    }
 
+
+    @Override
+    public void sendToHardware(){
         mVertexBufferID = new int[1];
         GLES20.glGenBuffers(1, mVertexBufferID, 0);
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, mVertexBufferID[0]);
@@ -53,10 +54,14 @@ public class QuadVertexBufferObject extends VertexBufferObject {
     }
 
     @Override
+    public void unloadFromHardware() {
+
+    }
+
+    @Override
     public void draw() {
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, mVertexBufferID[0]);
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
     }
-
 
 }

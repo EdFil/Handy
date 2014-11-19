@@ -1,7 +1,6 @@
 package com.eddapps.handy.engine.objects.primitive;
 
 import com.eddapps.handy.engine.objects.Entity;
-import com.eddapps.handy.engine.opengl.shader.programs.PositionColorShaderProgram;
 import com.eddapps.handy.engine.opengl.shader.programs.ShaderProgram;
 import com.eddapps.handy.engine.opengl.vbo.VertexBufferObject;
 
@@ -18,7 +17,7 @@ public abstract class Primitive extends Entity {
     public Primitive(VertexBufferObject vertexBufferObject, ShaderProgram shaderProgram){
         super();
         mVertexBufferObject = vertexBufferObject;
-        mVertexBufferObject.updateBuffer(this);
+        mVertexBufferObject.sendToHardware();
         mShaderProgram = shaderProgram;
     }
 

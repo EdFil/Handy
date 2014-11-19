@@ -21,9 +21,9 @@ public class SpriteVertexBufferObject extends VertexBufferObject {
     }
 
     @Override
-    public void updateBuffer(Entity entity){
-        final float X1 = -entity.getScaleX()/2.0f;
-        final float Y1 = -entity.getScaleY()/2.0f;
+    public void sendToHardware() {
+        final float X1 = -DEFAULT_X_SCALE/2.0f;
+        final float Y1 = -DEFAULT_Y_SCALE/2.0f;
         final float X2 = -X1;
         final float Y2 = -Y1;
 
@@ -60,6 +60,10 @@ public class SpriteVertexBufferObject extends VertexBufferObject {
         GLES20.glVertexAttribPointer(1, 2, GLES20.GL_FLOAT, false, 4 * Float.SIZE / 8, 2 * Float.SIZE / 8);
 
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+    }
+
+    @Override
+    public void unloadFromHardware() {
 
     }
 

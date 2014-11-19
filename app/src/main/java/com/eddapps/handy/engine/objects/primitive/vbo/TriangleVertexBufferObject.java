@@ -20,9 +20,9 @@ public class TriangleVertexBufferObject extends VertexBufferObject {
     }
 
     @Override
-    public void updateBuffer(Entity entity){
-        final float X1 = -entity.getScaleX()/2.0f;
-        final float Y1 = -entity.getScaleY()/2.0f;
+    public void sendToHardware() {
+        final float X1 = -DEFAULT_X_SCALE/2.0f;
+        final float Y1 = -DEFAULT_Y_SCALE/2.0f;
         final float X2 = -X1;
         final float Y2 = -Y1;
 
@@ -50,10 +50,14 @@ public class TriangleVertexBufferObject extends VertexBufferObject {
     }
 
     @Override
+    public void unloadFromHardware(){
+
+    }
+
+    @Override
     public void draw() {
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, mVertexBufferID[0]);
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 3);
     }
-
 
 }
