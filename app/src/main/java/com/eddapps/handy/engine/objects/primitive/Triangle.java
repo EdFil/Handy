@@ -1,12 +1,9 @@
 package com.eddapps.handy.engine.objects.primitive;
 
 import com.eddapps.handy.engine.objects.primitive.vbo.QuadVertexBufferObject;
-import com.eddapps.handy.engine.objects.primitive.vbo.TriangleVertexBufferObject;
-import com.eddapps.handy.engine.opengl.shader.ShaderProgramManager;
 import com.eddapps.handy.engine.opengl.shader.programs.PositionColorShaderProgram;
-import com.eddapps.handy.engine.opengl.shader.programs.ShaderProgram;
+import com.eddapps.handy.engine.opengl.shader.ShaderProgram;
 import com.eddapps.handy.engine.opengl.vbo.VertexBufferObject;
-import com.eddapps.handy.engine.utils.Clock;
 
 /**
  * Created by edgar on 14-11-2014.
@@ -25,7 +22,7 @@ public class Triangle extends Primitive {
     private final PositionColorShaderProgram mShaderProgram;
 
     public Triangle(){
-        this(new QuadVertexBufferObject(), ShaderProgramManager.getPositionColorShader());
+        this(new QuadVertexBufferObject(), new PositionColorShaderProgram());
     }
 
     public Triangle(VertexBufferObject vertexBufferObject, ShaderProgram shaderProgram) {

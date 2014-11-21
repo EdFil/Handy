@@ -2,25 +2,23 @@ package com.eddapps.handy.engine.opengl.shader.programs;
 
 import android.opengl.GLES20;
 
-import com.eddapps.handy.engine.opengl.shader.AttribVariable;
+import com.eddapps.handy.engine.opengl.shader.ShaderProgram;
+import com.eddapps.handy.engine.opengl.shader.constants.AttributeVariables;
+import com.eddapps.handy.engine.opengl.shader.constants.UniformVariables;
 
 /**
  * Created by Edgar on 10/07/2014.
  */
 public class PositionColorShaderProgram extends ShaderProgram {
 
-    private int mColorLocation;
-
-    private static final AttribVariable[] mProgramVariables = {
-            AttribVariable.in_Position
-    };
+    private static PositionColorShaderProgram mInstance = null;
 
     private static final String mVertexShader =
-            "attribute vec4 in_Position;                                                \n" +
-            "uniform vec4 Color;                                                        \n" +
-            "uniform mat4 ModelMatrix;                                                  \n" +
-            "uniform mat4 ViewMatrix;                                                   \n" +
-            "uniform mat4 ProjectionMatrix;                                             \n" +
+            "attribute vec4 " + AttributeVariables.in_Position + ";                     \n" +
+            "uniform vec4 " + UniformVariables.Color + ";                               \n" +
+            "uniform mat4 " + UniformVariables.ModelMatrix + ";                         \n" +
+            "uniform mat4 " + UniformVariables.ViewMatrix + ";                          \n" +
+            "uniform mat4 " + UniformVariables.ProjectionMatrix + ";                    \n" +
             "varying lowp vec4 ex_Color;                                                \n" +
             "                                                                           \n" +
             "void main() {                                                              \n" +
@@ -35,20 +33,32 @@ public class PositionColorShaderProgram extends ShaderProgram {
             "}                                                                          \n";
 
 
-    public PositionColorShaderProgram() {
-        this(mVertexShader, mFragmentShader, mProgramVariables);
+    private PositionColorShaderProgram() {
+        super(PositionColorShaderProgram.class.getSimpleName(), mVertexShader, mFragmentShader);
     }
 
-    protected PositionColorShaderProgram(final String vertexShader, final String fragmentShader, final AttribVariable[] programVariables){
-        super(vertexShader, fragmentShader, programVariables);
-        mColorLocation = GLES20.glGetUniformLocation(getProgramHandle(), "Color");
+    public static PositionColorShaderProgram getInstance(){
+        if(mInstance == null)
+            mInstance = new PositionColorShaderProgram();
+        return mInstance;
     }
 
-    public void setColor(float r, float g, float b, float a){
-        GLES20.glUniform4f(mColorLocation, r, g, b, a);
+    private static int ModelMatrixUniformLocation;
+    private static int ViewMatrixUniformLocation;
+    private static int ProjectionMatrixUniformLocation;
+    private static int ColorUniformLocation;
+
+
+    @Override
+    protected void bindAttributeLocations() {
+        GLES20.glBindAttribLocation(mProgramHandle, AttributeVariables.in_Position.getHandle(), AttributeVariables.in_Position.getName());
     }
 
-    public void setColor(float[] color){
-        GLES20.glUniform4f(mColorLocation, color[0], color[1], color[2], color[3]);
+    @Override
+    protected void getUniformLocations() {
+        ModelMatrixUniformLocation = GLES20.glGetUniformLocation(mProgramHandle, UniformVariables.ModelMatrix);
+        ViewMatrixUniformLocation = GLES20.glGetUniformLocation(mProgramHandle, UniformVariables.ViewMatrix);
+        ProjectionMatrixUniformLocation = GLES20.glGetUniformLocation(mProgramHandle, UniformVariables.ProjectionMatrix);
+        ColorUniformLocation = GLES20.glGetUniformLocation(mProgramHandle, UniformVariables.Color);
     }
 }

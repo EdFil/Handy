@@ -1,20 +1,13 @@
 package com.eddapps.handy.engine.opengl.shader.programs;
 
-import android.opengl.GLES20;
-
-import com.eddapps.handy.engine.opengl.shader.AttribVariable;
+import com.eddapps.handy.engine.opengl.shader.ShaderProgram;
 
 /**
  * Created by Edgar on 10/07/2014.
  */
-public class PositionColorTextureShaderProgram extends PositionColorShaderProgram {
+public class PositionColorTextureShaderProgram extends ShaderProgram {
 
-    private int mTextureLocation;
 
-    private static final AttribVariable[] mProgramVariables = {
-            AttribVariable.in_Position,
-            AttribVariable.in_TexCoordinate
-    };
 
     private static final String mVertexShader =
             "attribute vec4 in_Position;                                                \n" +
@@ -40,13 +33,18 @@ public class PositionColorTextureShaderProgram extends PositionColorShaderProgra
             "  gl_FragColor = texture2D(Texture, ex_TexCoordinate).rgba;                        \n" +
             "}                                                                                  \n";
 
-
     public PositionColorTextureShaderProgram() {
-        super(mVertexShader, mFragmentShader, mProgramVariables);
-        mTextureLocation = GLES20.glGetUniformLocation(getProgramHandle(), "Texture");
+        super(PositionColorTextureShaderProgram.class.getSimpleName(), mVertexShader, mFragmentShader);
     }
 
-    public void setTexture(float a){
-        //GLES20.glUniform4f(mColorLocation, r, g, b, a);
+
+    @Override
+    protected void bindAttributeLocations() {
+
+    }
+
+    @Override
+    protected void getUniformLocations() {
+
     }
 }

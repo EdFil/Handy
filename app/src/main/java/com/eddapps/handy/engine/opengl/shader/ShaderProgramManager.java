@@ -1,39 +1,57 @@
 package com.eddapps.handy.engine.opengl.shader;
 
-import com.eddapps.handy.engine.opengl.shader.programs.PositionColorShaderProgram;
-import com.eddapps.handy.engine.opengl.shader.programs.PositionColorTextureShaderProgram;
+import android.graphics.Shader;
+import android.util.Log;
+
+import com.eddapps.handy.engine.opengl.shader.exceptions.NullShaderException;
+import com.eddapps.handy.engine.opengl.shader.exceptions.ShaderException;
+
+import java.util.ArrayList;
 
 /**
  * Created by edgar on 29-07-2014.
  */
 public class ShaderProgramManager {
 
-    // ******** Singleton Code ********
+    private static final String TAG = ShaderProgramManager.class.getSimpleName();
 
-    private static ShaderProgramManager _instance = null;
+    // <Shader, usages>
+    private ArrayList<ShaderProgram> mLoadedShaderPrograms;
 
-    public static void init(){
-        if(_instance == null)
-            _instance = new ShaderProgramManager();
+    public ShaderProgramManager(){
+        mLoadedShaderPrograms = new ArrayList<ShaderProgram>();
     }
 
-    // ******** Shader Manager ********
-
-    public PositionColorShaderProgram POSITION_COLOR_SP = null;
-    public PositionColorTextureShaderProgram POSITION_COLOR_TEXTURE_SP = null;
-
-
-    protected ShaderProgramManager(){ }
-
-    public static PositionColorShaderProgram getPositionColorShader(){
-        if(_instance.POSITION_COLOR_SP == null)
-            _instance.POSITION_COLOR_SP = new PositionColorShaderProgram();
-        return _instance.POSITION_COLOR_SP;
+    public void loadShaderProgram(ShaderProgram shaderProgram){
+        try {
+            if (shaderProgram == null)
+               throw new NullShaderException();
+            else if (shaderProgram.isCompiled())
+                Log.d(TAG, "Shader " + shaderProgram.getName() + " already compiled.");
+            else if (mLoadedShaderPrograms.contains(shaderProgram)){
+                Log.d(TAG, "Shader " + shaderProgram.getName() + " already loaded.");
+            }else {
+                Log.d(TAG, "Shader " + shaderProgram.getName() + " was added.");
+                mLoadedShaderPrograms.add(shaderProgram);
+            }
+        }catch(ShaderException e) { Log.e(TAG, e.getMessage()); }
     }
 
-    public static PositionColorTextureShaderProgram getPositionColorTextureShader(){
-        if(_instance.POSITION_COLOR_TEXTURE_SP == null)
-            _instance.POSITION_COLOR_TEXTURE_SP = new PositionColorTextureShaderProgram();
-        return _instance.POSITION_COLOR_TEXTURE_SP;
+    public void destroy(){
+        for(int i = 0; i < mLoadedShaderPrograms.size(); i++)
+            mLoadedShaderPrograms.get(i).delete();
+        mLoadedShaderPrograms.clear();
     }
+
+    public void update(){
+        for(int i = 0; i < mLoadedShaderPrograms.size(); i++)
+            mLoadedShaderPrograms.get(i).compile();
+    }
+
+    public void onReload(){
+        Log.d(TAG, "--> Reloading " + mLoadedShaderPrograms.size() + " shaders.");
+        for(int i = 0; i < mLoadedShaderPrograms.size(); i++)
+            mLoadedShaderPrograms.get(i).reloadShader();
+    }
+
 }

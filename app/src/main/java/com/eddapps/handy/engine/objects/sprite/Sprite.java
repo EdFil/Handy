@@ -5,6 +5,7 @@ import android.opengl.GLES20;
 import com.eddapps.handy.engine.objects.primitive.Quad;
 import com.eddapps.handy.engine.objects.sprite.vbo.SpriteVertexBufferObject;
 import com.eddapps.handy.engine.opengl.shader.ShaderProgramManager;
+import com.eddapps.handy.engine.opengl.shader.programs.PositionColorShaderProgram;
 import com.eddapps.handy.engine.opengl.shader.programs.PositionColorTextureShaderProgram;
 import com.eddapps.handy.engine.opengl.texture.Texture;
 import com.eddapps.handy.engine.opengl.texture.TextureManager;
@@ -18,7 +19,7 @@ public class Sprite extends Quad {
     private PositionColorTextureShaderProgram mShaderProgram;
 
     public Sprite() {
-        super(new SpriteVertexBufferObject(), ShaderProgramManager.getPositionColorTextureShader());
+        super(new SpriteVertexBufferObject(), new PositionColorTextureShaderProgram());
         mShaderProgram = (PositionColorTextureShaderProgram)getShaderProgram();
         mTexture = new Texture();
     }
