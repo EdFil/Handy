@@ -14,23 +14,23 @@ public class PositionColorShaderProgram extends ShaderProgram {
     private static PositionColorShaderProgram mInstance = null;
 
     private static final String mVertexShader =
-            "attribute vec4 " + AttributeVariables.in_Position + ";                     \n" +
-            "uniform vec4 " + UniformVariables.Color + ";                               \n" +
-            "uniform mat4 " + UniformVariables.ModelMatrix + ";                         \n" +
-            "uniform mat4 " + UniformVariables.ViewMatrix + ";                          \n" +
-            "uniform mat4 " + UniformVariables.ProjectionMatrix + ";                    \n" +
-            "varying lowp vec4 ex_Color;                                                \n" +
-            "                                                                           \n" +
-            "void main() {                                                              \n" +
-            "  ex_Color = Color;                                                        \n" +
-            "  gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * in_Position; \n" +
-            "}                                                                          \n";
+            "attribute vec4 " + AttributeVariables.in_Position + ";                     " +
+            "uniform vec4 " + UniformVariables.Color + ";                               " +
+            "uniform mat4 " + UniformVariables.ModelMatrix + ";                         " +
+            "uniform mat4 " + UniformVariables.ViewMatrix + ";                          " +
+            "uniform mat4 " + UniformVariables.ProjectionMatrix + ";                    " +
+            "varying lowp vec4 ex_Color;                                                " +
+            "                                                                           " +
+            "void main() {                                                              " +
+            "  ex_Color = Color;                                                        " +
+            "  gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * in_Position; " +
+            "}                                                                          ";
 
     private static final String mFragmentShader =
-            "varying lowp vec4 ex_Color;                                                \n" +
-            "void main() {                                                              \n" +
-            "  gl_FragColor = ex_Color;                                                 \n" +
-            "}                                                                          \n";
+            "varying lowp vec4 ex_Color;                                                " +
+            "void main() {                                                              " +
+            "  gl_FragColor = ex_Color;                                                 " +
+            "}                                                                          ";
 
 
     private PositionColorShaderProgram() {
@@ -43,12 +43,6 @@ public class PositionColorShaderProgram extends ShaderProgram {
         return mInstance;
     }
 
-    private static int ModelMatrixUniformLocation;
-    private static int ViewMatrixUniformLocation;
-    private static int ProjectionMatrixUniformLocation;
-    private static int ColorUniformLocation;
-
-
     @Override
     protected void bindAttributeLocations() {
         GLES20.glBindAttribLocation(mProgramHandle, AttributeVariables.in_Position.getHandle(), AttributeVariables.in_Position.getName());
@@ -56,9 +50,9 @@ public class PositionColorShaderProgram extends ShaderProgram {
 
     @Override
     protected void getUniformLocations() {
-        ModelMatrixUniformLocation = GLES20.glGetUniformLocation(mProgramHandle, UniformVariables.ModelMatrix);
-        ViewMatrixUniformLocation = GLES20.glGetUniformLocation(mProgramHandle, UniformVariables.ViewMatrix);
-        ProjectionMatrixUniformLocation = GLES20.glGetUniformLocation(mProgramHandle, UniformVariables.ProjectionMatrix);
-        ColorUniformLocation = GLES20.glGetUniformLocation(mProgramHandle, UniformVariables.Color);
+        addUniform(UniformVariables.ModelMatrix, GLES20.glGetUniformLocation(mProgramHandle, UniformVariables.ModelMatrix));
+        addUniform(UniformVariables.ViewMatrix, GLES20.glGetUniformLocation(mProgramHandle, UniformVariables.ViewMatrix));
+        addUniform(UniformVariables.ProjectionMatrix, GLES20.glGetUniformLocation(mProgramHandle, UniformVariables.ProjectionMatrix));
+        addUniform(UniformVariables.Color, GLES20.glGetUniformLocation(mProgramHandle, UniformVariables.Color));
     }
 }

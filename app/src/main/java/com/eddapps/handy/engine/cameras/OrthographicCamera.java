@@ -7,10 +7,6 @@ import android.opengl.Matrix;
  */
 public class OrthographicCamera extends Camera {
 
-    public OrthographicCamera(int screenWidth, int screenHeight){
-        super(screenWidth, screenHeight);
-    }
-
     @Override
     protected void generateViewMatrix() {
         Matrix.setLookAtM(mViewMatrix, 0, getPositionX(), getPositionY(), 1.0f, getPositionX(), getPositionY(), 0.0f, 0.0f, 1.0f, 0.0f);

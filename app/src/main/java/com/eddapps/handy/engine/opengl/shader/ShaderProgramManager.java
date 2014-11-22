@@ -23,18 +23,16 @@ public class ShaderProgramManager {
     }
 
     public void loadShaderProgram(ShaderProgram shaderProgram){
-        try {
-            if (shaderProgram == null)
-               throw new NullShaderException();
-            else if (shaderProgram.isCompiled())
-                Log.d(TAG, "Shader " + shaderProgram.getName() + " already compiled.");
-            else if (mLoadedShaderPrograms.contains(shaderProgram)){
-                Log.d(TAG, "Shader " + shaderProgram.getName() + " already loaded.");
-            }else {
-                Log.d(TAG, "Shader " + shaderProgram.getName() + " was added.");
-                mLoadedShaderPrograms.add(shaderProgram);
-            }
-        }catch(ShaderException e) { Log.e(TAG, e.getMessage()); }
+        if (shaderProgram == null)
+           throw new NullShaderException();
+        else if (shaderProgram.isCompiled())
+            Log.d(TAG, "Shader " + shaderProgram.getName() + " already compiled.");
+        else if (mLoadedShaderPrograms.contains(shaderProgram)){
+            Log.d(TAG, "Shader " + shaderProgram.getName() + " already loaded.");
+        }else {
+            Log.d(TAG, "Shader " + shaderProgram.getName() + " was added.");
+            mLoadedShaderPrograms.add(shaderProgram);
+        }
     }
 
     public void destroy(){
@@ -53,5 +51,7 @@ public class ShaderProgramManager {
         for(int i = 0; i < mLoadedShaderPrograms.size(); i++)
             mLoadedShaderPrograms.get(i).reloadShader();
     }
+
+    public void printSize(){ Log.d(TAG, "" + mLoadedShaderPrograms.size()); }
 
 }

@@ -1,20 +1,16 @@
 package com.eddapps.handy.engine.opengl.shader;
 
-import android.graphics.Shader;
 import android.opengl.GLES20;
 import android.util.Log;
 
-import com.eddapps.handy.engine.opengl.shader.exceptions.AttributeNotFoundException;
 import com.eddapps.handy.engine.opengl.shader.exceptions.CouldNotCompileException;
-import com.eddapps.handy.engine.opengl.shader.exceptions.CouldNotCreateProgram;
-import com.eddapps.handy.engine.opengl.shader.exceptions.CouldNotCreateShader;
-import com.eddapps.handy.engine.opengl.shader.exceptions.CouldNotLinkProgram;
+import com.eddapps.handy.engine.opengl.shader.exceptions.CouldNotCreateProgramException;
+import com.eddapps.handy.engine.opengl.shader.exceptions.CouldNotCreateShaderException;
+import com.eddapps.handy.engine.opengl.shader.exceptions.CouldNotLinkProgramException;
+import com.eddapps.handy.engine.opengl.shader.exceptions.NullShaderException;
 import com.eddapps.handy.engine.opengl.shader.exceptions.ShaderException;
-import com.eddapps.handy.engine.opengl.shader.exceptions.UniformNotFoundException;
 
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 /**
  * Created by Edgar on 11/08/2014.
@@ -30,8 +26,8 @@ public abstract class ShaderProgram {
     private String mVertexShaderCode;
     private String mFragmentShaderCode;
 
-    //private HashMap<String, Integer> mAttributeLocations;
-    //private HashMap<String, Integer> mUniformLocations;
+    private HashMap<String, Integer> mAttributeLocations;
+    private HashMap<String, Integer> mUniformLocations;
 
     protected int mProgramHandle;
 
@@ -41,8 +37,8 @@ public abstract class ShaderProgram {
         mCompiled = false;
         mVertexShaderCode = vertexShaderCode;
         mFragmentShaderCode = fragmentShaderCode;
-        //mAttributeLocations = new HashMap<String, Integer>();
-        //mUniformLocations = new HashMap<String, Integer>();
+        mAttributeLocations = new HashMap<String, Integer>();
+        mUniformLocations = new HashMap<String, Integer>();
     }
 
 
@@ -92,7 +88,7 @@ public abstract class ShaderProgram {
 
             Log.d(TAG, mName + " finished compiling.");
 
-        }catch(ShaderException e){
+        }catch(NullShaderException e){
             Log.e(TAG, e.getMessage());
             mProgramHandle = 0;
             mCompiled = false;
@@ -110,9 +106,10 @@ public abstract class ShaderProgram {
         final int shaderHandle = GLES20.glCreateShader(shaderType);
 
         if(shaderHandle == 0)
-            throw new CouldNotCreateShader(mName, shaderType);
+            throw new CouldNotCreateShaderException(mName, shaderType);
 
         //Compile Shader
+        GLES20.glShaderSource(shaderHandle, shaderCode);
         GLES20.glCompileShader(shaderHandle);
 
         // Get the compilation status.
@@ -134,7 +131,7 @@ public abstract class ShaderProgram {
         mProgramHandle = GLES20.glCreateProgram();
         //Check if program was created
         if (mProgramHandle == 0)
-            throw new CouldNotCreateProgram(mName);
+            throw new CouldNotCreateProgramException(mName);
     }
 
     private void linkProgram(){
@@ -147,7 +144,23 @@ public abstract class ShaderProgram {
         if (linkStatus[0] == 0) {
             GLES20.glDeleteProgram(mProgramHandle);
             mProgramHandle = 0;
-            throw new CouldNotLinkProgram(mName, GLES20.glGetProgramInfoLog(mProgramHandle));
+            throw new CouldNotLinkProgramException(mName, GLES20.glGetProgramInfoLog(mProgramHandle));
         }
+    }
+
+    public void setUniform(String uniformName, float[] matrix) {
+        GLES20.glUniformMatrix4fv(mUniformLocations.get(uniformName), 1, false, matrix, 0);
+    }
+
+    public void setUniform(String uniformName, float x) {
+        GLES20.glUniform1f(mUniformLocations.get(uniformName), x);
+    }
+
+    public void setUniform(String uniformName, float x, float y, float z, float w) {
+        GLES20.glUniform4f(mUniformLocations.get(uniformName), x, y, z, w);
+    }
+
+    public void addUniform(String uniformName, int uniformHandler){
+        mUniformLocations.put(uniformName, uniformHandler);
     }
 }

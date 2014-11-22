@@ -1,11 +1,8 @@
 package com.eddapps.handy.engine.objects.sprite;
 
-import android.opengl.GLES20;
-
 import com.eddapps.handy.engine.objects.primitive.Quad;
 import com.eddapps.handy.engine.objects.sprite.vbo.SpriteVertexBufferObject;
-import com.eddapps.handy.engine.opengl.shader.ShaderProgramManager;
-import com.eddapps.handy.engine.opengl.shader.programs.PositionColorShaderProgram;
+import com.eddapps.handy.engine.opengl.shader.constants.UniformVariables;
 import com.eddapps.handy.engine.opengl.shader.programs.PositionColorTextureShaderProgram;
 import com.eddapps.handy.engine.opengl.texture.Texture;
 import com.eddapps.handy.engine.opengl.texture.TextureManager;
@@ -32,12 +29,12 @@ public class Sprite extends Quad {
     @Override
     public void uniformSets(){
         super.uniformSets();
-        mShaderProgram.setTexture(0);
+        mShaderProgram.setUniform(UniformVariables.TEXTURE, 1);
     }
 
     @Override
-    public void draw(){
+    public void draw(float[] viewMatrix, float[] projectionMatrix){
         mTexture.bind();
-        super.draw();
+        super.draw(viewMatrix, projectionMatrix);
     }
 }

@@ -1,13 +1,7 @@
 package com.eddapps.handy;
 
-import android.content.Context;
-
 import com.eddapps.handy.engine.Engine;
-import com.eddapps.handy.engine.cameras.Camera;
 import com.eddapps.handy.engine.objects.Entity;
-import com.eddapps.handy.engine.objects.primitive.Primitive;
-import com.eddapps.handy.engine.objects.sprite.Sprite;
-import com.eddapps.handy.engine.utils.Utilities;
 
 import java.util.ArrayList;
 

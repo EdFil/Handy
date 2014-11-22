@@ -10,4 +10,5 @@ public class UniformVariables {
     public static final String ProjectionMatrix = "ProjectionMatrix";
 
     public static final String Color = "Color";
+    public static final String TEXTURE = "Texture";
 }

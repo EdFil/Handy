@@ -2,6 +2,7 @@ package com.eddapps.handy.engine.objects.primitive;
 
 import com.eddapps.handy.engine.objects.Entity;
 import com.eddapps.handy.engine.opengl.shader.ShaderProgram;
+import com.eddapps.handy.engine.opengl.shader.constants.UniformVariables;
 import com.eddapps.handy.engine.opengl.shader.programs.PositionColorShaderProgram;
 import com.eddapps.handy.engine.opengl.vbo.VertexBufferObject;
 
@@ -22,14 +23,17 @@ public abstract class Primitive extends Entity {
         mShaderProgram = shaderProgram;
     }
 
-    public void draw(){
-        PositionColorShaderProgram.getInstance().bind().useProgram();
+    public void draw(float[] viewMatrix, float[] projectionMatrix){
+        mShaderProgram.bind();
+        mShaderProgram.setUniform(UniformVariables.ViewMatrix, viewMatrix);
+        mShaderProgram.setUniform(UniformVariables.ProjectionMatrix, projectionMatrix);
         uniformSets();
-        mShaderProgram.setModelMatrix(getModelMatrix());
         mVertexBufferObject.draw();
     }
 
-    public abstract void uniformSets();
+    public void uniformSets(){
+        mShaderProgram.setUniform(UniformVariables.ModelMatrix, getModelMatrix());
+    }
 
     //Getters
     public VertexBufferObject getVertexBufferObject(){ return mVertexBufferObject; }

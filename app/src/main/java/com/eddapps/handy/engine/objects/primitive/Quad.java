@@ -1,6 +1,7 @@
 package com.eddapps.handy.engine.objects.primitive;
 
 import com.eddapps.handy.engine.objects.primitive.vbo.QuadVertexBufferObject;
+import com.eddapps.handy.engine.opengl.shader.constants.UniformVariables;
 import com.eddapps.handy.engine.opengl.shader.programs.PositionColorShaderProgram;
 import com.eddapps.handy.engine.opengl.shader.ShaderProgram;
 import com.eddapps.handy.engine.opengl.vbo.VertexBufferObject;
@@ -23,11 +24,11 @@ public class Quad extends Primitive {
     private final PositionColorShaderProgram mShaderProgram;
 
     public Quad(){
-        this(new QuadVertexBufferObject(), new PositionColorShaderProgram());
+        this(new QuadVertexBufferObject(), PositionColorShaderProgram.getInstance());
     }
 
     public Quad(float positionX, float positionY){
-        this(new QuadVertexBufferObject(), new PositionColorShaderProgram());
+        this(new QuadVertexBufferObject(), PositionColorShaderProgram.getInstance());
     }
 
     public Quad(VertexBufferObject vertexBufferObject, ShaderProgram shaderProgram){
@@ -43,13 +44,14 @@ public class Quad extends Primitive {
         super.update();
     }
 
-    public void draw(){
-        super.draw();
+    public void draw(float[] viewMatrix, float[] projectionMatrix){
+        super.draw(viewMatrix, projectionMatrix);
     }
 
     @Override
     public void uniformSets() {
-        mShaderProgram.setColor(mRed, mGreen, mBlue, mAlpha);
+        super.uniformSets();
+        mShaderProgram.setUniform(UniformVariables.Color, mRed, mGreen, mBlue, mAlpha);
     }
 
 }

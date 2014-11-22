@@ -10,16 +10,20 @@ import java.nio.FloatBuffer;
  */
 public abstract class VertexBufferObject {
 
-    protected static float DEFAULT_X_SCALE = 1.0f;
-    protected static float DEFAULT_Y_SCALE = 1.0f;
+    private static float DEFAULT_X_SCALE = 1.0f;
+    private static float DEFAULT_Y_SCALE = 1.0f;
 
-    protected int mVertexBufferID[];
+    protected int mVertexBufferID;
     protected ByteBuffer mByteBuffer;
     protected FloatBuffer mFloatBuffer;
+
+    public abstract void onCreate();
+    public abstract void onDestroy();
 
     public abstract void sendToHardware();
     public abstract void unloadFromHardware();
 
+    public abstract void bind();
     public abstract void draw();
 
 

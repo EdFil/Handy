@@ -4,6 +4,7 @@ import android.opengl.GLES20;
 
 import com.eddapps.handy.engine.objects.Entity;
 import com.eddapps.handy.engine.opengl.vbo.VertexBufferObject;
+import com.eddapps.handy.engine.opengl.vbo.utils.VBOUtils;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -13,11 +14,17 @@ import java.nio.ByteOrder;
  */
 public class QuadVertexBufferObject extends VertexBufferObject {
 
+    private static final int NUM_VERTICES = 8;
+
     public QuadVertexBufferObject(){
-        mByteBuffer = ByteBuffer.allocateDirect(8 * 4); // 8 floats, 4 bytes per float
+        mByteBuffer = ByteBuffer.allocateDirect(NUM_VERTICES * VBOUtils.NUM_BYTES_PER_FLOAT);
         mByteBuffer.order(ByteOrder.nativeOrder());
         mFloatBuffer = mByteBuffer.asFloatBuffer();
+    }
 
+
+    @Override
+    public void onCreate() {
         final float X1 = -DEFAULT_X_SCALE/2.0f;
         final float Y1 = -DEFAULT_Y_SCALE/2.0f;
         final float X2 = -X1;
@@ -39,11 +46,13 @@ public class QuadVertexBufferObject extends VertexBufferObject {
         mFloatBuffer.position(0);
     }
 
+    @Override
+    public void onDestroy() {
+
+    }
 
     @Override
     public void sendToHardware(){
-        mVertexBufferID = new int[1];
-        GLES20.glGenBuffers(1, mVertexBufferID, 0);
         GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, mVertexBufferID[0]);
         GLES20.glBufferData(GLES20.GL_ARRAY_BUFFER, mFloatBuffer.capacity() * Float.SIZE / 8, mFloatBuffer, GLES20.GL_STATIC_DRAW);
         GLES20.glEnableVertexAttribArray(0);

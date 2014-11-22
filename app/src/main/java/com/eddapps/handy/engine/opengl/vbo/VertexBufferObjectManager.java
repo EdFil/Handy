@@ -4,10 +4,8 @@ import android.opengl.GLES20;
 import android.util.Log;
 
 import com.eddapps.handy.engine.objects.primitive.vbo.QuadVertexBufferObject;
-import com.eddapps.handy.engine.objects.primitive.vbo.TriangleVertexBufferObject;
 import com.eddapps.handy.engine.objects.sprite.vbo.SpriteVertexBufferObject;
 import com.eddapps.handy.engine.utils.Pair;
-import com.eddapps.handy.engine.utils.Utilities;
 
 import java.util.HashMap;
 
@@ -50,7 +48,7 @@ public class VertexBufferObjectManager {
         return mVertexBufferObjectsToBeLoaded.get(vertexBufferObjectClass.getName()).first;
     }
 
-    public void loadUnloadedVBO(){
+    public void update(){
         if(mVertexBufferObjectsToBeLoaded.size() > 0) {
             Log.d(TAG, "Loading " + mLoadedVertexBufferObjects.size() + " unloaded textures...");
             for (String className : mVertexBufferObjectsToBeLoaded.keySet()) {
@@ -73,7 +71,6 @@ public class VertexBufferObjectManager {
 
     private boolean validClass(Class vertexBufferObjectClassName) {
         return vertexBufferObjectClassName.equals(QuadVertexBufferObject.class)     ||
-               vertexBufferObjectClassName.equals(TriangleVertexBufferObject.class) ||
                vertexBufferObjectClassName.equals(SpriteVertexBufferObject.class);
     }
 
